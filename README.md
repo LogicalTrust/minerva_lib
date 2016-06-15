@@ -210,36 +210,46 @@ particular execution. It uses simple format to save the function calls:
 ## F.A.Q
 
 Q: My API function requires some pre-conditions to be satisfied.
+
 A: Write a simple wrapper to make sure that those conditions are met.
 
 Q: My API function requires some var initialization / depends on internal state
+
 A: Write wrapper or introduce new types that indicate internal state. Here's an quick example:
 
     STH_new *STH_new(void) => generic_not_null;
     STH *STH_init(STH_new *) => generic_not_null;
 
 Q: Where I can get help?
+
 A: Use -h switch or help command in the shell mode.
 
 Q: Function input variables depend on each other?
+
 A: You have to wrap function yourself, sorry.
 
 Q: How can I help you?
+
 A: See TODO, fill bug reports, send PRs. Your help is more than welcome.
 
 Q: What are the dependencies?
+
 A: Python, GNU Make, C compiler, Bison, Flex, py-yacc, libprogressbar.
 
 Q: Is the name - Polish Fuzzy Lop a joke?
+
 A: No, it's a coincidence.
 
 Q: Have it found any bugs, ever?
+
 A: Yes, including various minor bugs in OpenSSL, LibreSSL and OpenSSH.
 
 Q: What platforms are supported?
+
 A: We successfully ran this software on Linux, FreeBSD, NetBSD, OpenBSD and Mac OS X.
 
 Q: When are you going to implement more features (like coverage)?
+
 A: We don't know. For sure You'll do it first on your own!
 
 ## reading material
