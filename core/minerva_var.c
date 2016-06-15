@@ -10,6 +10,7 @@
 #include <assert.h>
 #include <target.h>
 #include <tree.h>
+#include <minerva_assert.h>
 #include <minerva_var.h>
 #include <minerva_func.h>
 #include <xmalloc.h>
