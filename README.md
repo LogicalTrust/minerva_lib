@@ -10,7 +10,7 @@
 
 It's a fuzzer dedicated mainly for torturing stuff like libraries or APIs, using minerva algorithm which is described in the [1] article. It can fuzz any piece of code that can be linked against its core. The idea is that everything you need is to feed minerva with C function prototypes and simple Makefile, and then you get a shiny fuzzer (but in most cases you have to provide generators).  **Let's make dumb fuzzing great again!**
 
-# adding new target
+# adding a new target
 
 ## generation process
 
@@ -36,9 +36,9 @@ It's a fuzzer dedicated mainly for torturing stuff like libraries or APIs, using
                     | target_bin | (your shiny fuzzer)
                     +------------+
 
-## configuration file
+## Configuration
 
-Configuration file has following format:
+A configuration file has following format:
 
     include files (eg. #include <header_file.h>
     
@@ -50,7 +50,7 @@ for toy API:
     int add_one(int x);
     int crashme(int x);
 
-configuration file (toy.mi) looks like this:
+A configuration file (toy.mi) looks like this:
 
     #include <minerva_generic.h>
     #include <toy.h>
@@ -80,7 +80,7 @@ mutation phase (see var_mut shell command).
 ## building
 
 Create your own subdirectory in target/ directory, it should contain
-configuration file (see above) and Makefile (it's minimal set of files
+configuration file (see above) and Makefile (it's a minimal set of files
 needed to generate fuzzer). Example Makefile looks as follows
 (/target/toy/Makefile):
 
@@ -91,7 +91,7 @@ needed to generate fuzzer). Example Makefile looks as follows
     include ../../mk/minerva.mk
 
 TARGET - is a target name (could be any name).
-LOCAL_SRC - is a set of file that is additionally linked with the fuzzer (so helper functions
+LOCAL_SRC - is a set of files that is additionally linked with the fuzzer (helper functions etc.)
 
 Makefiles may also include LDFLAGS in order to link against other libraries (see target/openssl/Makefile):
 
@@ -116,7 +116,7 @@ Following parameters to Makefile are supported:
 
 ## fuzzing
 
-Fuzzing should be as easy as run compiled binary.
+Fuzzing should be as easy as running compiled binary.
 
     target/toy/ $ lldb ./bin/minerva-toy-toy
     seed: 2946546160
@@ -250,7 +250,7 @@ A: We successfully ran this software on Linux, FreeBSD, NetBSD, OpenBSD and Mac 
 
 Q: When are you going to implement more features (like coverage)?
 
-A: We don't know. For sure You'll do it first on your own!
+A: We don't know. For sure you'll do it first on your own!
 
 ## reading material
 
