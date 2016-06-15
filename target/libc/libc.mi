@@ -1,0 +1,34 @@
+#include <time.h>
+#include <minerva_generic.h>
+#include "generate.h"
+
+-- time.h
+time_t *generate_time_t() => generic_success;
+
+time_t time(time_t *) => generic_not_zero;
+char *asctime(struct tm *) => generic_not_null;
+char *asctime_r(struct tm *, char *) => generic_not_null;
+
+char *ctime(time_t *) => generic_not_zero;
+char *ctime_r(time_t *, char *) => generic_not_null;
+
+struct tm *gmtime(time_t *) => generic_not_null;
+struct tm *gmtime_r(time_t *, struct tm *) => generic_not_null;
+struct tm *localtime(time_t *) => generic_not_null;
+struct tm *localtime_r(time_t *, struct tm *) => generic_not_null;
+
+time_t mktime(struct tm *) => generic_not_null;
+
+-- wrapper for strftime(3)
+char *strftime_wrapper(struct tm *) => generic_not_null;
+-- int getdate_r(char *, struct tm *) => generic_success;
+
+-- string
+
+char *strstr(char *, char *) => generic_void;
+char *strcasestr(char *, char *) => generic_void;
+char *strcmp(char *, char *) => generic_void;
+
+-- netdb
+
+-- struct hostent *gethostbyname(char *name) => generic_not_null;

@@ -1,0 +1,4 @@
+int mutate_int_and(int a {MUTATE}, int b {MUTATE}) => generic_success;
+int mutate_int_or(int a {MUTATE}, int b {MUTATE}) => generic_success;
+int mutate_int_xor(int a {MUTATE}, int b {MUTATE}) => generic_success;
+int mutate_int_bitflip(int a {MUTATE}) => generic_success;

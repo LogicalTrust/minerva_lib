@@ -1,0 +1,9 @@
+all: git-submodules lib/progressbar/libprogressbar.a
+
+
+git-submodules:
+		@git submodule init
+		@git submodule update
+
+lib/progressbar/libprogressbar.a:
+		$(MAKE) -C lib/progressbar -f Makefile

@@ -1,0 +1,6 @@
+#include <minerva_generic.h>
+#include <toy.h>
+
+int zero() => generic_success;
+int add_one(int x) => generic_success;
+int crashme(int x) => generic_success;

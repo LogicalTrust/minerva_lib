@@ -1,0 +1,3 @@
+[submodule "lib/progressbar"]
+	path = lib/progressbar
+	url = https://github.com/akat1/progressbar
