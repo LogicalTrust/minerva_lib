@@ -15,7 +15,8 @@
 #include <minerva_trace.h>
 
 dict_t *
-minerva_dict_create(void) {
+minerva_dict_create(void)
+{
     return dict_create();
 }
 
@@ -32,7 +33,8 @@ minerva_dict_get(dict_t *dict, const char *key)
 }
 
 void
-minerva_dict_destroy(dict_t *dict) {
+minerva_dict_destroy(dict_t *dict)
+{
     return dict_destroy(dict);
 }
 
