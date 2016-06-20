@@ -17,6 +17,7 @@ sig_atomic_t exit_loop = 0;
 sig_atomic_t segv = 0;
 static jmp_buf *sig_env;
 static struct sigaction old_sigsegv;
+static struct sigaction old_sigabrt;
 static struct sigaction old_sigint;
 
 static void
@@ -59,6 +60,14 @@ minerva_signal_setup(jmp_buf *env)
         exit(EXIT_FAILURE);
     }
 
+    sa.sa_handler = sigsegv_minerva_loop;
+    sa.sa_flags = SA_NODEFER | SA_RESETHAND;
+    /* signal handler - sigsegv */
+    if (sigaction(SIGSEGV, &sa, &old_sigabrt) != 0) {
+        fprintf(stderr, "can't install signal handler\n");
+        exit(EXIT_FAILURE);
+    }
+
     sa.sa_handler = sigint_minerva_loop;
     sa.sa_flags = 0;
     /* signal handler - ^c - sigint */
@@ -74,6 +83,12 @@ minerva_signal_revert(void)
 {
     /* signal handler - sigsegv */
     if (sigaction(SIGSEGV, &old_sigsegv, NULL) != 0) {
+        fprintf(stderr, "can't install signal handler\n");
+        exit(EXIT_FAILURE);
+    }
+
+    /* signal handler - sigabrt */
+    if (sigaction(SIGABRT, &old_sigabrt, NULL) != 0) {
         fprintf(stderr, "can't install signal handler\n");
         exit(EXIT_FAILURE);
     }
