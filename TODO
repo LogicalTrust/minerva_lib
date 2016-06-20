@@ -7,5 +7,4 @@ TODO:
  * get rid of compiler in Python
  * write (better/any) documentation
  * split fuzzing and shell stuff (into separate processes)
- * tidy signal related code
  * fix redundancy between minerva_loop & minerva_trace

@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE"
- * If we meet some day, and you think this stuff is worth it, you can buy us 
+ * If we meet some day, and you think this stuff is worth it, you can buy us
  * a beer in return.
  * ----------------------------------------------------------------------------
  */
@@ -11,7 +11,6 @@
 #endif
 #include <stdio.h>
 #include <stdlib.h>
-#include <signal.h>
 #include <setjmp.h>
 #include <assert.h>
 
@@ -20,22 +19,11 @@
 #include <minerva_func.h>
 #include <minerva_call.h>
 #include <minerva_assert.h>
+#include <minerva_signal.h>
 
 #include <progressbar.h>
 
 static jmp_buf segv_env;
-static sig_atomic_t segv = 0;
-
-static void
-sigsegv_minerva_trace(int sig)
-{
-    if (segv == 1) {
-        fprintf(stderr, "panic: segv in segv...");
-        exit(EXIT_FAILURE);
-    }
-    segv = 1;
-    longjmp(segv_env, 1);
-}
 
 minerva_trace_t *
 minerva_trace_new()
@@ -46,8 +34,8 @@ minerva_trace_new()
     return trace;
 }
 
-void 
-minerva_trace_record(minerva_trace_t *trace, minerva_var_t *new_var, 
+void
+minerva_trace_record(minerva_trace_t *trace, minerva_var_t *new_var,
         minerva_func_t *func, minerva_var_t **args)
 {
     minerva_fuzz_call_t *fuzz_call = xcalloc(1, sizeof(minerva_fuzz_call_t));
@@ -66,7 +54,7 @@ minerva_trace_record(minerva_trace_t *trace, minerva_var_t *new_var,
     TAILQ_INSERT_TAIL(trace->calls, fuzz_call, entries);
 }
 
-int 
+int
 minerva_trace_play(minerva_trace_t *trace)
 {
     minerva_vars_t *vars;
@@ -74,62 +62,48 @@ minerva_trace_play(minerva_trace_t *trace)
     minerva_var_t *new_var;
     minerva_var_t **args;
     progressbar *progress;
-    struct sigaction sa = {}, oldsa;
     int i;
     int r = R_PLAY_NOTCRASHED;
 
-    sa.sa_handler = sigsegv_minerva_trace;
-    sa.sa_flags = SA_NODEFER | SA_RESETHAND;
-    /* signal handler - sigsegv */
-    if (sigaction(SIGSEGV, &sa, &oldsa) != 0) {
-        fprintf(stderr, "can't install signal handler\n");
-        exit(EXIT_FAILURE);
-    }
 
     vars = minerva_vars_new();
 
     progress = progressbar_new("Replay", trace->calls_num);
 
-    TAILQ_FOREACH(call, trace->calls, entries) {
-        new_var = xcalloc(1, sizeof(minerva_var_t));
-        new_var = minerva_var_new(vars, call->func->return_type,
-            call->result_id);
-        args = NULL;
-        if (call->func->arg_num > 0) {
-            args = xcalloc(call->func->arg_num, sizeof(minerva_var_t));
-        }
-        for (i = 0; i < call->func->arg_num; ++i) {
-            args[i] = minerva_var_find(vars, call->func->args[i]->type,
-              call->arg_ids[i]);
-            assert(args[i] != NULL);
-        }
 
-        if (setjmp(segv_env)) {
-            segv = 0;
-            if (call == TAILQ_LAST(trace->calls, minerva_calls_t))
-                r = R_PLAY_CRASHEDLAST;
-            else
-                r = R_PLAY_CRASHEDMIDDLE;
+    if (setjmp(segv_env)) {
+        if (call == TAILQ_LAST(trace->calls, minerva_calls_t))
+            r = R_PLAY_CRASHEDLAST;
+        else
+            r = R_PLAY_CRASHEDMIDDLE;
+    } else {
+        minerva_signal_setup(&segv_env);
+        TAILQ_FOREACH(call, trace->calls, entries) {
+            new_var = xcalloc(1, sizeof(minerva_var_t));
+            new_var = minerva_var_new(vars, call->func->return_type,
+                call->result_id);
+            args = NULL;
+            if (call->func->arg_num > 0) {
+                args = xcalloc(call->func->arg_num, sizeof(minerva_var_t));
+            }
+            for (i = 0; i < call->func->arg_num; ++i) {
+                args[i] = minerva_var_find(vars, call->func->args[i]->type,
+                  call->arg_ids[i]);
+                assert(args[i] != NULL);
+            }
 
-            break;
-        } else
-            minerva_call(vars, new_var, call->func, args);
-        progressbar_inc(progress);
+                        minerva_call(vars, new_var, call->func, args);
+            progressbar_inc(progress);
+        }
     }
 
     progressbar_finish(progress);
-
-    sa.sa_handler = SIG_DFL;
-    sa.sa_flags = 0;
-    if (sigaction(SIGSEGV, &sa, &oldsa) != 0) {
-        fprintf(stderr, "can't install signal handler\n");
-        exit(EXIT_FAILURE);
-    }
+    minerva_signal_revert();
 
     return r;
 }
 
-void 
+void
 minerva_trace_save(minerva_trace_t *trace, const char *filename)
 {
     FILE *f = NULL;
@@ -141,7 +115,7 @@ minerva_trace_save(minerva_trace_t *trace, const char *filename)
         printf("Couldn't open output file, nothing saved.\n");
         return;
     }
-    
+
 #ifdef MINERVA_DEBUG
     fprintf(stderr, "saving %u calls in a trace\n", trace->calls_num);
 #endif
@@ -163,14 +137,14 @@ minerva_trace_save(minerva_trace_t *trace, const char *filename)
 minerva_trace_t *
 minerva_trace_restore(const char *filename, minerva_funcs_t* funcs)
 {
-    FILE *f = NULL; 
+    FILE *f = NULL;
     char *line = NULL;
     size_t len;
     int i;
     char func_name[128], args_string[512];
     minerva_fuzz_call_t *fuzz_call = NULL;
     minerva_trace_t *trace = minerva_trace_new();
-    
+
     f = fopen(filename, "r");
     if (f == NULL) {
         printf("Couldn't open trace file, nothing imported.\n");
@@ -180,23 +154,23 @@ minerva_trace_restore(const char *filename, minerva_funcs_t* funcs)
     while (getline(&line, &len, f) != -1) {
         trace->calls_num++;
         fuzz_call = xcalloc(1, sizeof(minerva_fuzz_call_t));
-        sscanf(line, "%u %*s %127[^(] %*[(] %511[^\n]", 
+        sscanf(line, "%u %*s %127[^(] %*[(] %511[^\n]",
                 &fuzz_call->result_id, func_name, args_string);
 
         fuzz_call->func = minerva_func_find(funcs, func_name);
 
         fuzz_call->arg_ids = NULL;
         if (fuzz_call->func->arg_num > 0) {
-            fuzz_call->arg_ids = 
+            fuzz_call->arg_ids =
                 xcalloc(fuzz_call->func->arg_num, sizeof(unsigned));
         }
         for (i = 0; i < fuzz_call->func->arg_num; ++i) {
-            sscanf(args_string, "%u %*[, ] %511[^\n]", 
+            sscanf(args_string, "%u %*[, ] %511[^\n]",
                     &fuzz_call->arg_ids[i], args_string);
         }
 
 #ifdef MINERVA_DEBUG
-       minerva_assert(i == fuzz_call->func->arg_num); 
+       minerva_assert(i == fuzz_call->func->arg_num);
 #endif
        TAILQ_INSERT_TAIL(trace->calls, fuzz_call, entries);
     }
@@ -253,7 +227,7 @@ minerva_trace_minimize(minerva_trace_t *trace, minerva_funcs_t *funcs)
             TAILQ_INSERT_HEAD(min_trace->calls, copy, entries);
         }
     }
-    
+
     return min_trace;
 }
 

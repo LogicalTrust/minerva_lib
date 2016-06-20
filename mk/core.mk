@@ -17,6 +17,7 @@ MINERVA_CORE_SRC=\
     minerva_repl.c \
     minerva_loop.c \
     minerva_trace.c \
+    minerva_signal.c \
     dict.c
 
 MINERVA_PARSER_OBJ=\
