@@ -133,7 +133,7 @@ extern const char *minerva_type_name[];
         types.add(f[1])
         for t in f[3]:
             types.add(t[0])
-
+    header_file += "#define MINERVA_FUNC_NUM %d\n" % (len(functions))
     header_file += __compile_type_enum(types)
     body_file += __compile_wrapper(functions)
     body_file += __compile_wrapper_init(functions)

@@ -14,6 +14,7 @@
 #include <minerva_var.h>
 #include <minerva_func.h>
 #include <xmalloc.h>
+#include <target.h>
 
 void
 minerva_funcs_print_stats(minerva_funcs_t *funcs)
@@ -112,37 +113,17 @@ minerva_func_qualify(minerva_func_t *func, minerva_vars_t *vars, int mutate)
 minerva_func_t *
 minerva_func_get(minerva_funcs_t *funcs, minerva_vars_t *vars, int mutate)
 {
+    static minerva_func_t * func_arr[MINERVA_FUNC_NUM];
     int n;
     minerva_func_t *func, *ret = NULL;
-
-    /* take random function, algorithm is a bit tricky, we don't know
-     * how many functions will qualify to be called using the variables
-     * from vars set. We use here magic algorithm (we take n'th function
-     * which can be called with 1/n probability). Below is small proof that
-     * everything works ok here:
-     *
-     * T: if n = 1, then P(x_1) = 1
-     * n = 1:
-     * P(x_1) = 1/1.
-     *
-     * for n, \forall i P(x_i) = 1/n => for n+1, \forall i P(x_i) = 1/(n+1)
-     * 1) P(x_n+1) = 1/n+1 
-     * 2) i <= n, P(x_i) = (1/n)(n/n+1) = 1/n+1
-     *
-     * XXXSHM: to be changed...
-     */
 
     n = 0;
     LIST_FOREACH(func, funcs, entries) {
         if (minerva_func_qualify(func, vars, mutate) != 0) {
-            n++;
-            /* XXXSHM: rand? */
-            if (rand() % n == 0) {
-                ret = func;
-            }
+            func_arr[n++] = func;
         }
     }
-
+	ret = func_arr[rand() % n];
 #ifdef MINERVA_DEBUG
     minerva_assert(ret != NULL);
 #endif
