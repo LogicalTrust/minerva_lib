@@ -68,7 +68,8 @@ Take a look at include/minerva_generic.h for the complete list of these.
 
 
 ###Variables can also have annotations
-It is easier to explain things using examples:
+Since it is easier to explain things using examples, let us use one:
+
     void BN_CTX_free(BN_CTX *c {DESTROY}) => generic_void;
 DESTROY indicates that call destroys the variable, so fuzzer wont use any further.
 
