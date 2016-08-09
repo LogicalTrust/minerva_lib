@@ -10,7 +10,7 @@ def __type_to_minerva(t):
     if t[0][0] != None:
         r += t[0][0] + "_"
 
-    r += t[0][1]
+    r += '_'.join(t[0][1].split())
 
     if t[1] == True:
         r += "_ptr"
@@ -32,7 +32,7 @@ def __type_to_str(t):
 
 def __compile_type_enum(types):
     r = "typedef enum {\n"
-    r += ",\n".join(map(lambda x: "\t"+__type_to_minerva(x), types))
+    r += ",\n".join(set(map(lambda x: "\t"+__type_to_minerva(x), types)))
     r += "\n\t,__minerva_types_no"
     r += "\n} minerva_type_t;\n"
     
