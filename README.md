@@ -68,16 +68,14 @@ Take a look at include/minerva_generic.h for the complete list of these.
 
 
 ###Variables can also have annotations
-Since it is easier to explain things using examples, let us use one:
 
     void BN_CTX_free(BN_CTX *c {DESTROY}) => generic_void;
 DESTROY indicates that call destroys the variable, so fuzzer wont use any further.
 
-Another example is MUTATE:
 
     int mutate_int_and(int a {MUTATE}, int b {MUTATE}) => generic_success;
 
-which indicates that particular variable is mutated by the function. Fuzzer uses it for 
+MUTATE indicates that particular variable is mutated by the function. Fuzzer uses it for 
 mutation phase (see var_mut shell command).
 
 ## building
