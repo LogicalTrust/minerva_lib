@@ -79,7 +79,7 @@ DESTROY indicates that call destroys the variable, so fuzzer wont use any furthe
 MUTATE indicates that particular variable is mutated by the function. Fuzzer uses it for 
 mutation phase (see var_mut shell command).
 
-## building
+## Building
 
 Create your own subdirectory in target/ directory, it should contain
 configuration file (as explained above) and Makefile. That's it,  a minimal set of files
@@ -116,7 +116,7 @@ Makefile also supports a few parameters, as follows:
    turned on. 
  - ASAN=1 - build with address sanitizer
 
-## fuzzing
+## Fuzzing
 
 Fuzzing should be as easy as running compiled binary.
 
@@ -143,7 +143,7 @@ Fuzzing should be as easy as running compiled binary.
        24  	        return x+2;
        25  	}
 
-## shell mode
+## Shell mode
 
 If you want to run the fuzzing in shell mode, execute the binary with -r option:
 
@@ -169,7 +169,7 @@ In order to perform fuzzing, being in shell mode, use fuzz command:
     Fuzzing |====================================================| ETA: 0h00m00s
     pfl> 
 
-## test case management
+## Test case management
 
 Fuzzing process saves traces, which can be replayed later on in order to reproduce
 particular execution. It uses simple format to save the function calls:
@@ -223,7 +223,7 @@ A: Write wrapper or introduce new types that indicate internal state. Here's an 
 ###Q: Where I can get help?
 A: Use -h switch or help command in the shell mode.
 
-###Q: Does Function input variables depend on each other?
+###Q: Does function input variables depend on each other?
 A: You have to wrap function yourself, sorry.
 
 ###Q: How can I help you?
@@ -244,12 +244,12 @@ A: We successfully ran this software on Linux, FreeBSD, NetBSD, OpenBSD and Mac 
 ###Q: When are you going to implement more features (like coverage)?
 A: We don't know. However, You're more than welcome to develop it on your own and share itwith us.
 
-## reading material
+## Reading material
 
 1. http://php-security.org/2010/05/11/mops-submission-05-the-minerva-php-fuzzer/
 2. http://www.slideshare.net/logicaltrust/torturing-the-php-interpreter
 
-## credits
+## Credits
 
  - @akat1_pl - http://akat1.pl/
  - n1x0n
