@@ -93,7 +93,7 @@ needed to generate fuzzer. Example Makefile looks as follows
     include ../../mk/minerva.mk
 
 TARGET - is a target name (could be any name).
-LOCAL_SRC - is a set of files that is additionally linked with the fuzzer (helper functions etc.)
+LOCAL_SRC - is a set of files that is additionally linked with the fuzzer (helper functions etc).
 
 Makefiles may also include LDFLAGS in order to link against other libraries (see target/openssl/Makefile):
 
