@@ -9,7 +9,7 @@
 # What am I dealing with?
 PFL is a fuzzer designed maily for torturing stuff (mainly libraries or APIs, sometimes co-workers). It uses minerva algorithm (please refer to an article listed as [1] in reading secton for any further information). Minerva_lib is able to fuzz any piece of code, as long as it can be linked against its core. 
 
-PFL can also be threated as an animal. Feed it with C function prototypes, supply a simple Makefile and it will treat you giving back your new shiny fuzzer.
+PFL can also be treated as an animal. Feed it with C function prototypes, supply a simple Makefile and it will treat you giving back your new shiny fuzzer.
 Since, as mentioned earlier on, PFL is in its early development stage, most cases you will have to provide generators.
 
 **Let's make dumb fuzzing great again!**
