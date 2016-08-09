@@ -16,7 +16,7 @@ Since, as mentioned earlier on, PFL is in its early development stage, most case
 
 # How do I add new targets?
 We tried to make this process as painless as possible. It is on you to provide config file (target.mi) and magic makefile (refer to a few target examples we provided in case of any problems). Than, PFL generates target.c and target.h, which supported by minerva_core results in target_bin (your shiny fuzzer, that is). 
-## generation process
+## Generation process
 
      +-----------+                 +----------------+
      | target.mi |<----------------| magic Makefile |
