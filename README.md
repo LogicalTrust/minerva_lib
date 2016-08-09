@@ -41,7 +41,7 @@ We tried to make this process as painless as possible. It is on you to provide c
                     +------------+
                     
 ## Configuration
-The format used in configuration file is very similar to C format. To help you imagine it, we provide the following schemes:
+The format used in configuration file is very similar to C format. To help you understand it we provide the following scheme.
 
     include files (eg. #include <header_file.h>
     
