@@ -1,17 +1,20 @@
 # **minerva_lib a.k.a Polish Fuzzy Lop**
 
-# disclamer
+# Disclamer
 
-**This stuff is highly experimental, so beware it's full of bugs, lacking of many features and dumb in many ways. You're using it at your own risk.**
+**Minerva_lib is still in its early development stage, therefore it is full of bugs. It also lacks many features. Since dumb fuzzing is just dumb fuzzing please don't expect any sort of intelligence from it. You're using it at your own risk. You've been warned.**
 
-**If you want to make the PFL a better fuzzer for you and me, then feel free to submit PRs, bugs, complaints, send your love or hate.**
+**If you would like to contribute to the project, please feel free to submit pull requests, bug reports, letters of complain (or love) etc. Any support is appreciated.**
 
-# what is it?
+# What am I dealing with?
+PFL is a fuzzer designed maily for torturing stuff (mainly libraries or APIs, sometimes co-workers). It uses minerva algorithm (please refer to an article listed as [1] in reading secton for any further information). Minerva_lib is able to fuzz any piece of code, as long as it can be linked against its core. 
 
-It's a fuzzer dedicated mainly for torturing stuff like libraries or APIs, using minerva algorithm which is described in the [1] article. It can fuzz any piece of code that can be linked against its core. The idea is that everything you need is to feed minerva with C function prototypes and simple Makefile, and then you get a shiny fuzzer (but in most cases you have to provide generators).  **Let's make dumb fuzzing great again!**
+PFL can also be threated as an animal. Feed it with C function prototypes, supply a simple Makefile and it will treat you giving back your new shiny fuzzer.
+Since, as mentioned earlier on, PFL is in its early development stage, most cases you will have to provide generators.
 
-# adding a new target
+**Let's make dumb fuzzing great again!**
 
+# How do I add new targets?
 ## generation process
 
      +-----------+                 +----------------+
@@ -35,53 +38,52 @@ It's a fuzzer dedicated mainly for torturing stuff like libraries or APIs, using
                     +------------+
                     | target_bin | (your shiny fuzzer)
                     +------------+
-
+We tried to make this process as painless as possible. It is on you to provide config file (target.mi) and magic makefile (refer to a few target examples we provided in case of any problems). Than, PFL generates target.c and target.h, which supported by minerva_core results in target_bin (your shiny fuzzer, that is). 
 ## Configuration
-
-A configuration file has following format:
+The format used in configuration file is very similar to C format. To help you imagine it, we provide the following schemes:
 
     include files (eg. #include <header_file.h>
     
     C prototypes => check function; (eg. int foo(int x) => generic_success;
 
-for toy API:
+### Toy target
+In order to help you get the basics we created a toy target(You can find it in /target/toy directory). Taking toy api's declarations from toy.h:
 
     int zero(void);
     int add_one(int x);
     int crashme(int x);
 
-A configuration file (toy.mi) looks like this:
+A configuration file (toy.mi) would look like that:
 
     #include <minerva_generic.h>
     #include <toy.h>
-    
+    --this a comment
     int zero() => generic_success;
     int add_one(int x) => generic_success;
     int crashme(int x) => generic_success;
 
-(you can find this example in /target/toy/ directory)
 
-Minerva includes generic functions that check the result of particular call, see include/minerva_generic.h for their list.
+For the sake of PFL working, minerva includes generic functionsin order to check the result of particular call.
+Take a look at include/minerva_generic.h for the complete list of these.
 
-Variables can have annotations:
 
+###Variables can also have annotations
+It is easier to explain things using examples:
     void BN_CTX_free(BN_CTX *c {DESTROY}) => generic_void;
-
-DESTROY means that call destroys variable (means it will be not used in the
-next calls).
+DESTROY indicates that call destroys the variable, so fuzzer wont use any further.
 
 Another example is MUTATE:
 
     int mutate_int_and(int a {MUTATE}, int b {MUTATE}) => generic_success;
 
-which means that particular variable is mutated by the function. It's used by
+which indicates that particular variable is mutated by the function. Fuzzer uses it for 
 mutation phase (see var_mut shell command).
 
 ## building
 
 Create your own subdirectory in target/ directory, it should contain
-configuration file (see above) and Makefile (it's a minimal set of files
-needed to generate fuzzer). Example Makefile looks as follows
+configuration file (as explained above) and Makefile. Thats it,  a minimal set of files
+needed to generate fuzzer. Example Makefile looks as follows
 (/target/toy/Makefile):
 
     TARGET=toy
@@ -103,10 +105,10 @@ Makefiles may also include LDFLAGS in order to link against other libraries (see
     
     include ../../mk/minerva.mk
 
-the include of minerva.mk is mandatory as it does magic to generate fuzzer for
-you. Building system is mostly inspired by BSD ports.
+the include of minerva.mk is mandatory (it does magic to generate fuzzer for
+you). Building system is mostly inspired by BSD ports.
 
-Following parameters to Makefile are supported:
+Makefile also supports a few parameters, as follows:
 
  
 
@@ -143,7 +145,7 @@ Fuzzing should be as easy as running compiled binary.
 
 ## shell mode
 
-For shell mode, run binary with -r option:
+If you want to run the fuzzing in shell mode, execute the binary with -r option:
 
     target/toy/ $ ./bin/minerva-toy-toy -r
     seed: 100837884
@@ -159,7 +161,7 @@ For shell mode, run binary with -r option:
     show(trace) - shows trace
     quit, exit - quits
 
-You can run fuzzing here by using fuzz command:
+In order to perform fuzzing, beeing in shell mode, use fuzz command:
 
     target/toy/ $ ./bin/minerva-toy-toy -r
     seed: 3366955315
@@ -169,7 +171,7 @@ You can run fuzzing here by using fuzz command:
 
 ## test case management
 
-Fuzzing process saves traces which can be replayed in order to reproduce
+Fuzzing process saves traces, which can be replayed later on in order to reproduce
 particular execution. It uses simple format to save the function calls:
 
     target/toy/ $ ./bin/minerva-toy-toy -T /dev/stdout
@@ -224,13 +226,13 @@ Q: Where I can get help?
 
 A: Use -h switch or help command in the shell mode.
 
-Q: Function input variables depend on each other?
+Q: Does Function input variables depend on each other?
 
 A: You have to wrap function yourself, sorry.
 
 Q: How can I help you?
 
-A: See TODO, fill bug reports, send PRs. Your help is more than welcome.
+A: Take a look at TODO list, fill bug reports, send PRs. Your help is more than welcome.
 
 Q: What are the dependencies?
 
@@ -250,7 +252,7 @@ A: We successfully ran this software on Linux, FreeBSD, NetBSD, OpenBSD and Mac 
 
 Q: When are you going to implement more features (like coverage)?
 
-A: We don't know. For sure you'll do it first on your own!
+A: We don't know. However, You're more than welcome to develop it on your own and share itwith us.
 
 ## reading material
 
