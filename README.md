@@ -71,7 +71,7 @@ Take a look at include/minerva_generic.h for the complete list of these.
 ###Variables can also have annotations
 
     void BN_CTX_free(BN_CTX *c {DESTROY}) => generic_void;
-DESTROY indicates that call destroys the variable, so fuzzer wont use any further.
+DESTROY indicates that call destroys the variable, so fuzzer wont use it any further.
 
 
     int mutate_int_and(int a {MUTATE}, int b {MUTATE}) => generic_success;
@@ -82,9 +82,9 @@ mutation phase (see var_mut shell command).
 ## Building
 
 Create your own subdirectory in target/ directory, it should contain
-configuration file (as explained above) and Makefile. That's it,  a minimal set of files
-needed to generate fuzzer. Example Makefile looks as follows
-(/target/toy/Makefile):
+configuration file (as explained above) and Makefile. That's it, a minimal set of files
+needed to generate fuzzer. 
+Example Makefile looks as follows(/target/toy/Makefile):
 
     TARGET=toy
     LOCAL_SRC= \
@@ -105,7 +105,7 @@ Makefiles may also include LDFLAGS in order to link against other libraries (see
     
     include ../../mk/minerva.mk
 
-the include of minerva.mk is mandatory (it does magic to generate fuzzer for
+Including of minerva.mk is mandatory (it does magic to generate fuzzer for
 You). Building system is mostly inspired by BSD ports.
 
 Makefile also supports a few parameters, as follows:
