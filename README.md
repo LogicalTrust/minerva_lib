@@ -1,13 +1,13 @@
 # **minerva_lib a.k.a Polish Fuzzy Lop**
 
-# Disclamer
+# Disclaimer
 
 **Minerva_lib is still in its early development stage, therefore it is full of bugs. It also lacks many features. Since dumb fuzzing is just dumb fuzzing please don't expect any sort of intelligence from it. You're using it at your own risk. You've been warned.**
 
 **If you would like to contribute to the project, please feel free to submit pull requests, bug reports, letters of complain (or love) etc. Any support is appreciated.**
 
 # What am I dealing with?
-PFL is a fuzzer designed maily for torturing stuff (mainly libraries or APIs, sometimes co-workers). It uses minerva algorithm (please refer to an article listed as [1] in reading secton for any further information). Minerva_lib is able to fuzz any piece of code, as long as it can be linked against its core. 
+PFL is a fuzzer designed mainly for torturing stuff (mainly libraries or APIs, sometimes co-workers). It uses minerva algorithm (please refer to an article listed as [1] in reading secton for any further information). Minerva_lib is able to fuzz any piece of code, as long as it can be linked against its core. 
 
 PFL can also be treated as an animal. Feed it with C function prototypes, supply a simple Makefile and it will treat you with a new shiny fuzzer.
 Since, as mentioned earlier on, PFL is in its early development stage, most cases you will have to provide generators though.
@@ -64,7 +64,7 @@ A configuration file (toy.mi) would look like that:
     int crashme(int x) => generic_success;
 
 
-For the sake of PFL working, minerva includes generic functionsin order to check the result of particular call.
+For the sake of PFL working, minerva includes generic functions in order to check the result of particular call.
 Take a look at include/minerva_generic.h for the complete list of these.
 
 
@@ -82,7 +82,7 @@ mutation phase (see var_mut shell command).
 ## building
 
 Create your own subdirectory in target/ directory, it should contain
-configuration file (as explained above) and Makefile. Thats it,  a minimal set of files
+configuration file (as explained above) and Makefile. That's it,  a minimal set of files
 needed to generate fuzzer. Example Makefile looks as follows
 (/target/toy/Makefile):
 
@@ -161,7 +161,7 @@ If you want to run the fuzzing in shell mode, execute the binary with -r option:
     show(trace) - shows trace
     quit, exit - quits
 
-In order to perform fuzzing, beeing in shell mode, use fuzz command:
+In order to perform fuzzing, being in shell mode, use fuzz command:
 
     target/toy/ $ ./bin/minerva-toy-toy -r
     seed: 3366955315
