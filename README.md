@@ -7,7 +7,7 @@
 **If you would like to contribute to the project, please feel free to submit pull requests, bug reports, letters of complain (or love) etc. Any support is appreciated.**
 
 # What am I dealing with?
-PFL is a fuzzer designed mainly for torturing stuff (mainly libraries or APIs, sometimes co-workers). It uses minerva algorithm (please refer to an article listed as [1] in reading secton for any further information). Minerva_lib is able to fuzz any piece of code, as long as it can be linked against its core. 
+PFL is a fuzzer designed mainly for torturing stuff (mainly libraries or APIs, sometimes co-workers). It uses minerva algorithm (please refer to an article listed as [1] in reading section for any further information). Minerva_lib is able to fuzz any piece of code, as long as it can be linked against its core. 
 
 PFL can also be treated as an animal. Feed it with C function prototypes, supply a simple Makefile and it will treat you with a new shiny fuzzer.
 Since, as mentioned earlier on, PFL is in its early development stage, most cases you will have to provide generators though.
@@ -43,9 +43,9 @@ We tried to make this process as painless as possible. It is on you to provide c
 ## Configuration
 The format used in configuration file is very similar to C format. To help you understand it we provide the following scheme.
 
-    include files (eg. #include <header_file.h>
+    include files (e.g.. #include <header_file.h>
     
-    C prototypes => check function; (eg. int foo(int x) => generic_success;
+    C prototypes => check function; (e.g.. int foo(int x) => generic_success;
 
 ### Toy target
 In order to help you get the basics we created a toy target(You can find it in /target/toy directory). Taking toy api's declarations from toy.h:
@@ -106,7 +106,7 @@ Makefiles may also include LDFLAGS in order to link against other libraries (see
     include ../../mk/minerva.mk
 
 the include of minerva.mk is mandatory (it does magic to generate fuzzer for
-you). Building system is mostly inspired by BSD ports.
+You). Building system is mostly inspired by BSD ports.
 
 Makefile also supports a few parameters, as follows:
 
@@ -242,7 +242,7 @@ A: Yes, including various minor bugs in OpenSSL, LibreSSL and OpenSSH.
 A: We successfully ran this software on Linux, FreeBSD, NetBSD, OpenBSD and Mac OS X.
 
 ###Q: When are you going to implement more features (like coverage)?
-A: We don't know. However, You're more than welcome to develop it on your own and share itwith us.
+A: We don't know. However, You're more than welcome to develop it on your own and share it with us.
 
 ## Reading material
 
@@ -255,4 +255,4 @@ A: We don't know. However, You're more than welcome to develop it on your own an
  - n1x0n
  - s1m0n
  - PSi
- - Zeruś
+ - Zeru&#347;
