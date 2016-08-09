@@ -231,7 +231,7 @@ A: Take a look at TODO list, fill bug reports, send PRs. Your help is more than 
 ###Q: What are the dependencies?
 A: Python, GNU Make, C compiler, Bison, Flex, py-yacc, libprogressbar.
 
-###Q: Is the name - Polish Fuzzy Lop a joke?
+###Q: Is the name - Polish Fuzzy Loop a joke?
 A: No, it's a coincidence.
 
 ###Q: Have it found any bugs, ever?
