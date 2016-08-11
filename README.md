@@ -45,7 +45,7 @@ The format used in configuration file is very similar to C format. To help you u
 
     include files (e.g.. #include <header_file.h>
     
-    C prototypes => check function; (e.g.. int foo(int x) => generic_success;
+    C prototypes => check function; (e.g. int foo(int x) => generic_success;)
 
 ### Toy target
 In order to help you get the basics we created a toy target(You can find it in /target/toy directory). Taking toy api's declarations from toy.h:
