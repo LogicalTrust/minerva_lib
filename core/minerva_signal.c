@@ -62,7 +62,7 @@ minerva_signal_setup(jmp_buf *env)
 
     sa.sa_handler = sigsegv_minerva_loop;
     sa.sa_flags = SA_NODEFER | SA_RESETHAND;
-    /* signal handler - sigsegv */
+    /* signal handler - sigabrt (for ASAN) */
     if (sigaction(SIGABRT, &sa, &old_sigabrt) != 0) {
         fprintf(stderr, "can't install signal handler\n");
         exit(EXIT_FAILURE);
