@@ -11,6 +11,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <assert.h>
+#include <limits.h>
 
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -37,7 +38,7 @@ repl_help(int argc, minerva_dict_var_t **args)
       "play(trace) - plays trace or context\n"
       "restore(\"filename\") - restores trace from file\n"
       "save(trace, \"filename\") - saves trace to file\n"
-      "min(trace) - minimizes trace\n"
+      "min(trace, [rounds]) - minimizes trace, rounds limit iteration\n"
       "show(trace) - shows trace\n"
       "verbose(num) - set verbose level 0 - normal, 1 - noisy, 2+ debug\n"
       "quit, exit - quits\n");
@@ -283,10 +284,18 @@ repl_min(int argc, minerva_dict_var_t **args)
 {
     minerva_dict_var_t *r;
     minerva_dict_var_result_t *result;
+    unsigned rounds = UINT_MAX;
 
     if (args[0]->type != MINERVA_RESULT_T) {
         minerva_repl_error("type mismatch");
         return NULL;
+    }
+    if (argc > 1) {
+        if (args[1]->type != MINERVA_NUMBER_T) {
+            minerva_repl_error("type mismatch");
+            return NULL;
+        }
+        rounds = args[1]->val.num;
     }
 
     r = xcalloc(1, sizeof(*r));
@@ -298,25 +307,8 @@ repl_min(int argc, minerva_dict_var_t **args)
     minerva_funcs_init(result->funcs);
 
     result->trace = minerva_trace_minimize(
-      ((minerva_dict_var_result_t*)(args[0]->val.var))->trace, result->funcs);
-
-    switch(minerva_trace_play(result->trace)) {
-        case R_PLAY_NOTCRASHED:
-            minerva_repl_error(
-              "whoops, after minimization the trace doesn't crash anymore");
-            break;
-        case R_PLAY_CRASHEDMIDDLE:
-            minerva_repl_error(
-              "whoops, after minimization the trace crashes in the middle");
-            break;
-        case R_PLAY_CRASHEDLAST:
-            printf(ANSI_COLOR_GREEN "all good" ANSI_COLOR_RESET "\n" );
-            break;
-        default:
-        /*NOTREACHED*/
-        assert(0);
-    }
-
+      ((minerva_dict_var_result_t*)(args[0]->val.var))->trace, 
+      result->funcs, rounds);
 
     return r;
 }
