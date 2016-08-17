@@ -8,7 +8,7 @@ import ply.lex as lex
 tokens = (
         'LCHEVRON', 'RCHEVRON',
         'LBRACKET', 'RBRACKET',
-        'STRUCT', 'PTR', 'UNION',
+        'STRUCT', 'PTR', 'UNION','STANDARDTYPE', 'TYPE_QUALIFIER',
         'COMMA', 'SEPARATOR', 'COMMENT', 'STRING',
         'MIINCLUDE', 'INCLUDE', 'INCLUDEFILE', 'INCLUDEFILELOCAL', 'ARROW'
 )
@@ -17,8 +17,9 @@ def t_newline(t):
     r'\n+'
     t.lexer.lineno += t.value.count("\n")
 
-def t_UNION(t): r'union'; return t
-def t_STRUCT(t): r'struct'; return t
+def t_UNION(t): r'\bunion\b'; return t
+def t_STRUCT(t): r'\bstruct\b'; return t
+def t_TYPE_QUALIFIER(t): r'\bconst\b'; return t; #skipped volatile
 t_LCHEVRON = r'\{'
 t_RCHEVRON = r'\}'
 t_LBRACKET = r'\('
@@ -28,7 +29,8 @@ t_SEPARATOR = r';'
 t_PTR = r'\*'
 t_ARROW = r'\=\>'
 t_COMMENT = r'--[^\n]*'
-t_STRING = r'((const|unsigned|signed|long|short|struct|restrict)[ ]+)*[a-zA-Z][a-zA-Z0-9_\-\.\/]*'
+t_STRING = r'[a-zA-Z][a-zA-Z0-9_\-\.\/]*'
+t_STANDARDTYPE = r'\b(void|char|short|int|long|float|double|signed|unsigned)\b'
 t_MIINCLUDE = r'%include'
 t_INCLUDE = r'\#include'
 t_INCLUDEFILE = r'<'+t_STRING+r'>'
@@ -126,24 +128,61 @@ def p_var_arg_flags(t):
     t[0] = [t[1]] + t[0]
 
 
-
 def p_type(t):
-    '''type : type_basic PTR
-            | type_basic'''
-
+    '''type : type_list
+            | user_definied_type'''
     if len(t) == 2:
-        t[0] = (t[1], False)
+        t[0] = t[1]
     else:
-        t[0] = (t[1], True)
+        t[0] = (t[1],t[2])
 
-def p_type_basic(t):
-    '''type_basic : STRUCT STRING
-                  | UNION STRING
-                  | STRING'''
+def p_user_definied_type(t):
+    '''user_definied_type : TYPE_QUALIFIER STRING ptr_list 
+                          | UNION STRING ptr_list
+                          | STRUCT STRING ptr_list
+                          | struct_things
+                          | STRING ptr_list'''
+    # I dont like it...
+    if len(t) == 4:
+        t[0] = (t[1],(t[2],t[3]))
+    elif len(t) == 3:
+        t[0] = (t[1],t[2])
+    else:
+        t[0] = t[1]
+
+def p_struct_things(t):
+    '''struct_things : TYPE_QUALIFIER STRING
+                     | STRUCT STRING
+					 | UNION STRING
+                     | STRING'''
+    if len(t) == 2 :
+        t[0] = (None,t[1])
+    else:
+        t[0] = (t[1],(None,t[2]))
+
+def p_ptr_list(t):
+    '''ptr_list : PTR ptr_list
+                | PTR'''
+    if len(t) == 2:
+        t[0] = (None,t[1])
+    else:
+        t[0] = (t[1],t[2])
+
+def p_type_list(t):
+    '''type_list :  basic_type
+                  | basic_type type_list'''
+
     if len(t) == 2:
         t[0] = (None, t[1])
     else:
         t[0] = (t[1], t[2])
+
+def p_basic_type(t):
+    '''basic_type : TYPE_QUALIFIER
+                  | STANDARDTYPE
+                  | PTR'''
+    #skipped storage_class_specifier (auto,register,static, extern, typedef)
+    t[0] = t[1]
 
 def p_empty(p):
     'empty :'
