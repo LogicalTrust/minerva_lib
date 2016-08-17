@@ -20,6 +20,7 @@
 #include <minerva_call.h>
 #include <minerva_assert.h>
 #include <minerva_signal.h>
+#include <minerva_repl.h>
 
 #include <progressbar.h>
 
@@ -46,7 +47,7 @@ minerva_trace_record(minerva_trace_t *trace, minerva_var_t *new_var,
     fuzz_call->result_id = new_var->id;
     fuzz_call->arg_ids = NULL;
     if (func->arg_num > 0) {
-        fuzz_call->arg_ids = xcalloc(func->arg_num, sizeof(unsigned));
+        fuzz_call->arg_ids = xcalloc(func->arg_num, sizeof(func->arg_num));
     }
     for (i = 0; i < func->arg_num; ++i) {
         fuzz_call->arg_ids[i] = args[i]->id;
@@ -161,8 +162,8 @@ minerva_trace_restore(const char *filename, minerva_funcs_t* funcs)
 
         fuzz_call->arg_ids = NULL;
         if (fuzz_call->func->arg_num > 0) {
-            fuzz_call->arg_ids =
-                xcalloc(fuzz_call->func->arg_num, sizeof(unsigned));
+            fuzz_call->arg_ids = xcalloc(fuzz_call->func->arg_num, 
+                    sizeof(fuzz_call->func->arg_num));
         }
         for (i = 0; i < fuzz_call->func->arg_num; ++i) {
             sscanf(args_string, "%u %*[, ] %511[^\n]",
@@ -196,7 +197,8 @@ minerva_fuzz_call_copy(minerva_fuzz_call_t *call, minerva_funcs_t *funcs)
 
     copy->arg_ids = NULL;
     if (copy->func->arg_num > 0) {
-        copy->arg_ids = xcalloc(copy->func->arg_num, sizeof(unsigned));
+        copy->arg_ids = xcalloc(copy->func->arg_num, 
+                sizeof(copy->func->arg_num));
         for (i = 0; i < copy->func->arg_num; i++)
             copy->arg_ids[i] = call->arg_ids[i];
     }
@@ -206,7 +208,7 @@ minerva_fuzz_call_copy(minerva_fuzz_call_t *call, minerva_funcs_t *funcs)
 }
 
 minerva_trace_t *
-minerva_trace_minimize(minerva_trace_t *trace, minerva_funcs_t *funcs)
+minerva_trace_minimize_naive(minerva_trace_t *trace, minerva_funcs_t *funcs)
 {
     minerva_fuzz_call_t *call;
     /* XXX - assuming all var ids to be nonnegative and less then calls_num */
@@ -231,6 +233,129 @@ minerva_trace_minimize(minerva_trace_t *trace, minerva_funcs_t *funcs)
     return min_trace;
 }
 
+minerva_trace_t *
+minerva_trace_minimize(minerva_trace_t *trace, minerva_funcs_t *funcs,
+        unsigned int rounds)
+{
+    minerva_trace_t *current, *min_trace;
+    minerva_fuzz_call_t *call;
+    int i;
+    unsigned int *relevant = xcalloc(trace->calls_num, sizeof(unsigned int));
+    unsigned int *removed = xcalloc(trace->calls_num, sizeof(unsigned int));
+    minerva_vars_t *vars = NULL;
+    minerva_var_t *new_var = NULL;
+    minerva_var_t **args = NULL;
+
+    /* TODO - replace this list with an array? */
+    typedef struct elem_t {
+        unsigned int id;
+        LIST_ENTRY(elem_t) entries;
+    } elem_t;
+    typedef struct list_t list_t;
+    LIST_HEAD(list_t, elem_t);
+    elem_t *e, *f;
+    list_t irrelevant;
+    char crashed;
+
+    LIST_INIT(&irrelevant);
+    /* Marks fuzz calls potentially irrelevant to the crash and discover
+     * dependecies of calls. */
+    relevant[TAILQ_LAST(trace->calls, minerva_calls_t)->result_id] = 1;
+    TAILQ_FOREACH_REVERSE(call, trace->calls, minerva_calls_t, entries) {
+        if (relevant[call->result_id]) {
+            for (i = 0; i < call->func->arg_num; ++i) {
+                relevant[call->arg_ids[i]] = 1;
+            }
+        } else {
+            e = xcalloc(1, sizeof(elem_t));
+            e->id = call->result_id;
+            LIST_INSERT_HEAD(&irrelevant, e, entries);
+        }
+    }
+
+    minerva_signal_setup(&segv_env);
+
+    min_trace = minerva_trace_copy(trace, funcs);
+    LIST_FOREACH(e, &irrelevant, entries) {
+        if (rounds == 0) {
+            break;
+        }
+        if (rand() % 2) {
+            // try and remove e->id together with dependant calls
+            memset(removed, 0, sizeof(unsigned int) * trace->calls_num);
+            removed[e->id] = 1;
+            current = minerva_trace_new();
+            vars = minerva_vars_new();
+            crashed = 0;
+            TAILQ_FOREACH(call, min_trace->calls, entries) {
+                if (!removed[call->result_id]) {
+                    args = NULL;
+                    if (call->func->arg_num > 0) {
+                        args = xcalloc(call->func->arg_num,
+                                sizeof(minerva_var_t));
+                    }
+                    for (i = 0; i < call->func->arg_num; ++i) {
+                        args[i] = minerva_var_find(vars,
+                                call->func->args[i]->type,
+                                call->arg_ids[i]);
+                        // argument not found - call must have depended
+                        // on a removed one
+                        if (args[i] == NULL) {
+                            removed[call->result_id] = 1;
+                            goto next_call;
+                        }
+                    }
+                    new_var = xcalloc(1, sizeof(minerva_var_t));
+                    new_var =
+                        minerva_var_new(vars, call->func->return_type,
+                                call->result_id);
+
+                    if (setjmp(segv_env)) {
+                        segv = 0;
+                        crashed = 1;
+                        if (call != TAILQ_LAST(min_trace->calls,
+                                    minerva_calls_t)) {
+                            minerva_repl_error("crashed in the middle!");
+                        }
+                        min_trace = minerva_trace_copy(current, funcs);
+                        // these calls are removed just now
+                        LIST_FOREACH(f, &irrelevant, entries) {
+                            if (removed[f->id]) {
+                                LIST_REMOVE(f, entries);
+                            }
+                        }
+                        break;
+                    } else {
+                        minerva_trace_record(current, new_var,
+                                call->func, args);
+                        minerva_call(vars, new_var, call->func, args);
+                    }
+                }
+next_call:;
+            }
+            if (!crashed) {
+                // call proved to be influential in reproducing the crash
+                LIST_REMOVE(e, entries);
+            }
+            minerva_vars_destroy(vars);
+            minerva_trace_destroy(current);
+            rounds--;
+        }
+    }
+
+    minerva_signal_revert();
+
+    while(!LIST_EMPTY(&irrelevant)) {
+        e = LIST_FIRST(&irrelevant);
+        LIST_REMOVE(e, entries);
+        xfree(e);
+    }
+    xfree(removed);
+    xfree(relevant);
+
+    return min_trace;
+}
+
 static void
 minerva_trace_call_destroy(minerva_calls_t *head, minerva_fuzz_call_t *call)
 {
@@ -247,4 +372,19 @@ minerva_trace_destroy(minerva_trace_t *trace)
     free(trace->calls);
     free(trace);
 
+}
+
+minerva_trace_t *
+minerva_trace_copy(minerva_trace_t *original, minerva_funcs_t *funcs)
+{
+    minerva_trace_t *copy = minerva_trace_new();
+    minerva_fuzz_call_t *call, *cc;
+
+    TAILQ_FOREACH(call, original->calls, entries) {
+        cc = minerva_fuzz_call_copy(call, funcs);
+        TAILQ_INSERT_TAIL(copy->calls, cc, entries);
+    }
+    copy->calls_num = original->calls_num;
+
+    return copy;
 }

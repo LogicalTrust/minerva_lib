@@ -14,9 +14,9 @@
 #include <minerva_func.h>
 
 typedef struct minerva_fuzz_call_t {
-    unsigned result_id;
+    unsigned int result_id;
     minerva_func_t *func;
-    unsigned *arg_ids;
+    unsigned int *arg_ids;
     TAILQ_ENTRY(minerva_fuzz_call_t) entries;
 } minerva_fuzz_call_t;
 typedef struct minerva_calls_t minerva_calls_t;
@@ -24,7 +24,7 @@ TAILQ_HEAD(minerva_calls_t, minerva_fuzz_call_t);
 
 typedef struct minerva_trace_t {
     minerva_calls_t *calls;
-    unsigned calls_num;
+    unsigned int calls_num;
 } minerva_trace_t;
 
 typedef enum {
@@ -39,6 +39,8 @@ void minerva_trace_record(minerva_trace_t *, minerva_var_t *, minerva_func_t *,
 int minerva_trace_play(minerva_trace_t*);
 void minerva_trace_save(minerva_trace_t*, const char*);
 minerva_trace_t *minerva_trace_restore(const char*, minerva_funcs_t *);
-minerva_trace_t *minerva_trace_minimize(minerva_trace_t *, minerva_funcs_t *);
+minerva_trace_t *minerva_trace_minimize(minerva_trace_t*, minerva_funcs_t*,
+        unsigned int);
 void minerva_trace_destroy(minerva_trace_t *);
+minerva_trace_t *minerva_trace_copy(minerva_trace_t *, minerva_funcs_t *);
 #endif /* ! _MINERVA_TRACE_H_ */

@@ -45,7 +45,7 @@ minerva_var_t *minerva_var_new(minerva_vars_t *, minerva_type_t,
 void minerva_var_destroy(minerva_vars_t *, minerva_var_t *);
 void minerva_vars_destroy(minerva_vars_t *);
 minerva_var_t *minerva_var_get(minerva_vars_t *, minerva_type_t);
-minerva_var_t *minerva_var_find(minerva_vars_t *, minerva_type_t, unsigned);
+minerva_var_t *minerva_var_find(minerva_vars_t *, minerva_type_t, unsigned int);
 void minerva_vars_evolution(minerva_vars_t *);
 
 #endif /* ! _MINERVA_VAR_H_ */
