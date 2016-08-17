@@ -284,12 +284,13 @@ repl_min(int argc, minerva_dict_var_t **args)
 {
     minerva_dict_var_t *r;
     minerva_dict_var_result_t *result;
-    unsigned rounds = UINT_MAX;
+    unsigned int rounds = UINT_MAX;
 
     if (args[0]->type != MINERVA_RESULT_T) {
         minerva_repl_error("type mismatch");
         return NULL;
     }
+
     if (argc > 1) {
         if (args[1]->type != MINERVA_NUMBER_T) {
             minerva_repl_error("type mismatch");
@@ -307,7 +308,7 @@ repl_min(int argc, minerva_dict_var_t **args)
     minerva_funcs_init(result->funcs);
 
     result->trace = minerva_trace_minimize(
-      ((minerva_dict_var_result_t*)(args[0]->val.var))->trace, 
+      ((minerva_dict_var_result_t*)(args[0]->val.var))->trace,
       result->funcs, rounds);
 
     return r;
