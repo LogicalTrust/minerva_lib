@@ -47,7 +47,7 @@ minerva_trace_record(minerva_trace_t *trace, minerva_var_t *new_var,
     fuzz_call->result_id = new_var->id;
     fuzz_call->arg_ids = NULL;
     if (func->arg_num > 0) {
-        fuzz_call->arg_ids = xcalloc(func->arg_num, sizeof(unsigned int));
+        fuzz_call->arg_ids = xcalloc(func->arg_num, sizeof(func->arg_num));
     }
     for (i = 0; i < func->arg_num; ++i) {
         fuzz_call->arg_ids[i] = args[i]->id;
@@ -162,8 +162,8 @@ minerva_trace_restore(const char *filename, minerva_funcs_t* funcs)
 
         fuzz_call->arg_ids = NULL;
         if (fuzz_call->func->arg_num > 0) {
-            fuzz_call->arg_ids =
-                xcalloc(fuzz_call->func->arg_num, sizeof(unsigned int));
+            fuzz_call->arg_ids = xcalloc(fuzz_call->func->arg_num, 
+                    sizeof(fuzz_call->func->arg_num));
         }
         for (i = 0; i < fuzz_call->func->arg_num; ++i) {
             sscanf(args_string, "%u %*[, ] %511[^\n]",
@@ -197,7 +197,8 @@ minerva_fuzz_call_copy(minerva_fuzz_call_t *call, minerva_funcs_t *funcs)
 
     copy->arg_ids = NULL;
     if (copy->func->arg_num > 0) {
-        copy->arg_ids = xcalloc(copy->func->arg_num, sizeof(unsigned int));
+        copy->arg_ids = xcalloc(copy->func->arg_num, 
+                sizeof(copy->func->arg_num));
         for (i = 0; i < copy->func->arg_num; i++)
             copy->arg_ids[i] = call->arg_ids[i];
     }
