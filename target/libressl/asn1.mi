@@ -1,3 +1,4 @@
+#include <minerva_generic.h>
 #include <openssl/asn1.h>
 
 ASN1_TYPE *ASN1_generate_nconf(char *str, CONF *nconf) => generic_void;
@@ -17,3 +18,4 @@ int ASN1_STRING_to_UTF8(char *out, ASN1_STRING *in) => generic_not_zero;
 int ASN1_STRING_print_ex(BIO *out, ASN1_STRING *str, long flags) => generic_not_zero;
 int ASN1_STRING_print_ex_fp(FILE *fp, ASN1_STRING *str, long flags) => generic_not_zero;
 int ASN1_STRING_print(BIO *out, ASN1_STRING *str) => generic_not_zero;
+

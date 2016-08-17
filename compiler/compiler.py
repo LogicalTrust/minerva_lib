@@ -7,26 +7,21 @@ MINERVA_PREFIX = "minerva_";
 def __type_to_minerva(t):
     r = "__minerva_"
 
-    if t[0][0] != None:
-        r += t[0][0] + "_"
-
-    r += '_'.join(t[0][1].split())
-
-    if t[1] == True:
-        r += "_ptr"
+    while t[0] is not None:
+        r += t[0] + "_"
+        t = t[1]
+    r += t[1]
+    r = r.replace("*","ptr")
 
     return r + "_t"
 
 def __type_to_str(t):
     r = ""
 
-    if t[0][0] != None:
-        r += t[0][0] + " "
-
-    r += t[0][1]
-
-    if t[1] == True:
-        r += " *"
+    while t[0] is not None:
+        r += t[0] + " "
+        t = t[1]
+    r += t[1]
 
     return r
 
@@ -40,7 +35,7 @@ def __compile_type_enum(types):
 
 def __compile_type_name(types):
     r = "const char *minerva_type_name[] = {\n"
-    r += ",\n".join(map(lambda x: "\t\""+x[0][1]+"\"", types))
+    r += ",\n".join(map(lambda x: "\t\""+__type_to_str(x)+"\"", types))
     r += "\n};\n"
     
     return r
@@ -52,25 +47,27 @@ def __compile_wrapper(funcs):
     for f in funcs:
         r = "int\n"
         r += "__minerva_wrap_call_"+f[2]+"(minerva_var_t *new, minerva_var_t **vars) {\n"
-        for i, a in enumerate(f[3]):
+        #skipping void args
+        args = [ elem for elem in f[3] if elem[0][1] != "void" ]
+
+        for i, a in enumerate(args):
             a = a[0]
             r += "\t"+__type_to_str(a)+" "+"__arg"+str(i)+" = "
-            if a[1] == True:
+            if '*' in __type_to_str(a):
                 r += "("+__type_to_str(a)+")vars["+str(i)+"]->val;\n"
             else:
                 r += "*("+__type_to_str(a)+"*)vars["+str(i)+"]->val;\n"
-
-        if f[1][0][1] == 'void' and f[1][1] == 0:
-                r += "\t"+f[2]+"("+",".join(["__arg"+str(i) for i in range(len(f[3]))])+");"
+        if f[1][1] == 'void':
+                r += "\t"+f[2]+"("+",".join(["__arg"+str(i) for i in range(len(args))])+");"
         else:
-            if f[1][1] == True:
+            if '*' in f[1][1]:
                 r += "\tnew->val = " + \
-                  f[2]+"("+",".join(["__arg"+str(i) for i in range(len(f[3]))])+");"
+                  f[2]+"("+",".join(["__arg"+str(i) for i in range(len(args))])+");"
             else: 
                 r += "\tnew->val = xcalloc(1,sizeof("+__type_to_str(f[1])+"));\n"
                 r += "\tnew->flags |= F_VAR_ALLOC;\n"
                 r += "\t*(("+__type_to_str(f[1])+"*)new->val) = ("+__type_to_str(f[1])+")"+\
-                  f[2]+"("+",".join(["__arg"+str(i) for i in range(len(f[3]))])+");"
+                  f[2]+"("+",".join(["__arg"+str(i) for i in range(len(args))])+");"
      
         r += "\n\treturn 1;\n}\n\n"
         c.append(r)
