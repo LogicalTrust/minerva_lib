@@ -8,7 +8,7 @@ import ply.lex as lex
 tokens = (
         'LCHEVRON', 'RCHEVRON',
         'LBRACKET', 'RBRACKET',
-        'STRUCT', 'PTR', 'UNION','STANDARDTYPE', 'TYPE_QUALIFIER',
+        'STRUCT', 'PTR', 'UNION', 'RESTRICT', 'STANDARDTYPE', 'TYPE_QUALIFIER',
         'COMMA', 'SEPARATOR', 'COMMENT', 'STRING',
         'MIINCLUDE', 'INCLUDE', 'INCLUDEFILE', 'INCLUDEFILELOCAL', 'ARROW'
 )
@@ -20,6 +20,7 @@ def t_newline(t):
 def t_UNION(t): r'\bunion\b'; return t
 def t_STRUCT(t): r'\bstruct\b'; return t
 def t_TYPE_QUALIFIER(t): r'\bconst\b'; return t; #skipped volatile
+def t_RESTRICT(t): r'\brestrict\b'; return t;
 t_LCHEVRON = r'\{'
 t_RCHEVRON = r'\}'
 t_LBRACKET = r'\('
@@ -86,8 +87,8 @@ def p_function(t):
         t[0] = ('function', t[1],t[2],[],t[6])
 
 def p_args(t):
-    '''args : arg COMMA args
-            | arg'''
+    '''args : arg_wrapper COMMA args
+            | arg_wrapper'''
 
     if len(t) == 2:
         t[0] = []
@@ -96,6 +97,14 @@ def p_args(t):
     
     t[0] = [t[1]] + t[0]
 
+def p_arg_wrapper(t):
+    '''arg_wrapper : RESTRICT arg
+                   | arg'''
+    if len(t) == 2:
+        t[0] = t[1]
+    else:
+        t[2][1].append('UNIQUE')
+        t[0] = t[2]
 def p_arg(t):
     '''arg : type STRING var_flags
            | type var_flags'''
