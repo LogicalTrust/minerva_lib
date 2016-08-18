@@ -80,7 +80,6 @@ mutate_int_and(int a, int b)
 MUTATE_TYPE_BITFLIP(int)
 MUTATE_TYPE_BITFLIP(char)
 MUTATE_TYPE_BITFLIP(long)
-MUTATE_TYPE_BITFLIP(float)
 
 /* CASTS */
 /* God, have mercy on him */
