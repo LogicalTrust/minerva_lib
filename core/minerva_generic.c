@@ -79,6 +79,8 @@ mutate_int_and(int a, int b)
 
 MUTATE_TYPE_BITFLIP(int)
 MUTATE_TYPE_BITFLIP(char)
+MUTATE_TYPE_BITFLIP(long)
+MUTATE_TYPE_BITFLIP(float)
 
 /* CASTS */
 /* God, have mercy on him */
@@ -89,9 +91,9 @@ MUTATE_TYPE_BITFLIP(char)
     }
 CAST_TYPE(int,char)
 CAST_TYPE(char,int)
-CAST_TYPE(long long, int)
-CAST_TYPE(int, long long)
 CAST_TYPE(long, int)
 CAST_TYPE(int, long)
 CAST_TYPE(float,double)
 CAST_TYPE(double,float)
+CAST_TYPE(int,float)
+CAST_TYPE(float,int)

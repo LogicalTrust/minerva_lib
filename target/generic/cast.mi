@@ -1,10 +1,15 @@
 #include <minerva_generic.h>
-
-char    int_to_char     (int)    => generic_success;
-int     char_to_int     (char)   => generic_success;
-int     long_to_int     (long)   => generic_success;
-long    int_to_long     (int)    => generic_success;
-double  float_to_double (float)  => generic_success;
-float   double_to_float (double) => generic_success;
-int     float_to_int    (float)  => generic_success;
-float   int_to_float    (int)    => generic_success;
+--mutators
+int     mutate_int_bitflip  (int)    => generic_success;
+char    mutate_char_bitflip (char)   => generic_success;
+long    mutate_long_bitflip (long)   => generic_success;
+float   mutate_float_bitflip(float)  => generic_success;    
+--casts
+char    int_to_char         (int)    => generic_success;
+int     char_to_int         (char)   => generic_success;
+int     long_to_int         (long)   => generic_success;
+long    int_to_long         (int)    => generic_success;
+double  float_to_double     (float)  => generic_success;
+float   double_to_float     (double) => generic_success;
+int     float_to_int        (float)  => generic_success;
+float   int_to_float        (int)    => generic_success;
