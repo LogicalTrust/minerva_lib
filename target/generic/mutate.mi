@@ -1,0 +1,9 @@
+#include <minerva_generic.h>
+--mutators
+int     mutate_int_bitflip  (int)       => generic_success;
+char    mutate_char_bitflip (char)      => generic_success;
+long    mutate_long_bitflip (long)      => generic_success;
+float   mutate_float_bitflip(float)     => generic_success;    
+int     mutate_int_xor      (int, int)  => generic_success;
+int     mutate_int_or       (int, int)  => generic_success;
+int     mutate_int_and      (int, int)  => generic_success;

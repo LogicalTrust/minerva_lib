@@ -36,5 +36,17 @@ int mutate_int_and(int, int );
 #define MUTATE_TYPE_BITFLIP_PROTO(type) type mutate_##type##_bitflip(type)
 MUTATE_TYPE_BITFLIP_PROTO(int);
 MUTATE_TYPE_BITFLIP_PROTO(char);
+MUTATE_TYPE_BITFLIP_PROTO(long);
+
+/* God, have mercy on him */
+#define CAST_TYPE_PROTO(from_type, to_type)  to_type from_type##_to_##to_type(from_type x)
+CAST_TYPE_PROTO(int,char)
+CAST_TYPE_PROTO(char,int)
+CAST_TYPE_PROTO(long, int)
+CAST_TYPE_PROTO(int, long)
+CAST_TYPE_PROTO(float,double)
+CAST_TYPE_PROTO(double,float)
+CAST_TYPE_PROTO(int,float)
+CAST_TYPE_PROTO(float,int)
 
 #endif /* ! _MINERVA_GENERIC_H_ */
