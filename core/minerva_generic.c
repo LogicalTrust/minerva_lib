@@ -79,3 +79,19 @@ mutate_int_and(int a, int b)
 
 MUTATE_TYPE_BITFLIP(int)
 MUTATE_TYPE_BITFLIP(char)
+
+/* CASTS */
+/* God, have mercy on him */
+#define CAST_TYPE(from_type,to_type) \
+    to_type from_type##_to_##to_type(from_type x) \
+    { \
+        return (to_type) x; \
+    }
+CAST_TYPE(int,char)
+CAST_TYPE(char,int)
+CAST_TYPE(long long, int)
+CAST_TYPE(int, long long)
+CAST_TYPE(long, int)
+CAST_TYPE(int, long)
+CAST_TYPE(float,double)
+CAST_TYPE(double,float)
