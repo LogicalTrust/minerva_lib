@@ -1,9 +1,16 @@
 #include <sys/types.h>
 #include <time.h>
+#include <wctype.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 static int ctr = 0;
 
+void* char_ptr_to_void_ptr(char* a)
+{
+    return (void*) a;
+}
 time_t *
 generate_time_t(void)
 {
@@ -20,7 +27,7 @@ format_string(size_t max)
     size_t i;
 
     if (max == 0)
-        max = rand() % 8192;
+        max = rand() % 0x2000;
 
     r = calloc(max+1, sizeof(*r));
 
@@ -34,7 +41,11 @@ format_string(size_t max)
 
     return 0;
 }
-
+wint_t generate_wint_t()
+{
+    return rand()%0x100;
+}
+/*
 char *
 strftime_wrapper(struct tm *tm)
 {
@@ -42,7 +53,7 @@ strftime_wrapper(struct tm *tm)
     char *fmt;
     char *dst;
 
-    max = 32 + rand() % 4096;
+    max = 32 + rand() % 0x1000;
     dst = calloc(max, sizeof(*dst));
     if (dst == NULL)
         goto out;
@@ -56,4 +67,4 @@ strftime_wrapper(struct tm *tm)
 out:
     free(fmt);
     return dst;
-}
+}*/

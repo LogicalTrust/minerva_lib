@@ -1,34 +1,262 @@
 #include <time.h>
+#include <string.h>
+#include <wctype.h>
+#include <ctype.h>
 #include <minerva_generic.h>
+#include <math.h>
 #include "generate.h"
+#include "wrappers.h"
+-- TODO:
+-- exceptions, not sure whether i shall use these functions at all
+-- problem - when a couple of functions are named the same, redefinition happens.
+-- <cuchar> (uchar.h)
 
--- time.h
+--
+-- stdio.h
+--
+
+
+
+
+--
+-- wchar.h
+-- does not support files, yet.
+struct my_wide_ptr* generate_wide_str() => generic_success;
+
+double wcstod_wrapper (struct my_wide_ptr* str) => generic_success;
+long int wcstol_wrapper (struct my_wide_ptr* str) => generic_success;
+unsigned long int wcstoul_wrapper (struct my_wide_ptr* str) => generic_success;
+
+wint_t btowc (int c) => generic_success;
+void mbrlen_wrapper() => generic_success;
+void mbrtowc_wrapper (struct my_ptr* str) => generic_success;
+void mbsrtowcs_wrapper (struct my_ptr* str) => generic_success;
+void wcrtomb_wrapper (struct my_wide_ptr* str) => generic_success;
+int wctob (wint_t wc) => generic_success;
+void wcsrtombs_wrapper(struct my_wide_ptr* str) => generic_success;
+struct my_wide_ptr*  wcschr_wrapper(struct my_wide_ptr* str, wchar_t wc) => generic_success;
+int wcscmp_wrapper(struct my_wide_ptr* str1, struct my_wide_ptr* str2) => generic_success;
+int wcscoll_wrapper(struct my_wide_ptr* str1, struct my_wide_ptr* str2) => generic_success;
+int wcscspn_wrapper(struct my_wide_ptr* str1, struct my_wide_ptr* str2) => generic_success;
+void wcspbrk_wrapper (struct my_wide_ptr* str1, struct my_wide_ptr* str2) => generic_success;
+int wcsspn_wrapper(struct my_wide_ptr* str1, struct my_wide_ptr* str2) => generic_success;
+--int wcsstr_wrapper(struct my_wide_ptr* str1{UNIQUE}, struct my_wide_ptr* str2 {UNIQUE}) => generic_success;
+size_t wcsxfrm_wrapper (struct my_wide_ptr* str) => generic_success;
+--struct my_wide_ptr* wmemchr_wrapper(struct my_wide_ptr* str,wchar_t wc) => generic_success;
+-- void c16rtomb_wrapper ( struct my_ptr* str ) => generic_success;
+
+--
+-- math.h
+--
+double cos (double x) => generic_success;
+double sin(double x) => generic_success;
+double tan (double x) => generic_success;
+double acos (double x) => generic_success;
+double asin(double x) => generic_success;
+double atan(double x) => generic_success;
+double atan2(double y, double x) => generic_success;
+
+double cosh  (double x) => generic_success;
+float coshf (float x) => generic_success;
+long double coshl (long double x) => generic_success;
+double sinh  (double x) => generic_success;
+float sinhf (float x) => generic_success;
+long double sinhl (long double x) => generic_success;
+double tanh  (double x) => generic_success;
+float tanhf (float x) => generic_success;
+long double tanhl (long double x) => generic_success;
+
+double exp  (double x) => generic_success;
+float expf (float x) => generic_success;
+long double expl (long double x) => generic_success;
+double ldexp  (double x , int exp) => generic_success;
+float ldexpf (float x , int exp) => generic_success;
+long double ldexpl (long double x, int exp) => generic_success;
+double log( double x) => generic_success;
+float logf (float x) => generic_success;
+long double logl(long double x) => generic_success;
+double log10  (double x) => generic_success;
+float log10f (float x) => generic_success;
+long double log10l (long double x) => generic_success;
+double frexp_wrapper(double x, int* exp) => generic_success;
+float frexpf_wrapper (float x, int* exp) => generic_success;
+long double frexpl_wrapper(long double x, int* exp) => generic_success;
+double modf_wrapper (double x , double* intpart) => generic_success;
+float modff_wrapper (float x , float* intpart) => generic_success;
+long double modfl_wrapper (long double x, long double* intpart) => generic_success;
+
+double pow  (double base , double exponent) => generic_success;
+float powf (float base , float exponent) => generic_success;
+long double powl (long double base, long double exponent) => generic_success;
+double sqrt  (double x) => generic_success;
+float sqrtf (float x) => generic_success;
+long double sqrtl (long double x) => generic_success;
+double ceil  (double x) => generic_success;
+float ceilf (float x) => generic_success;
+long double ceill (long double x) => generic_success;
+double floor  (double x) => generic_success;
+float floorf (float x) => generic_success;
+long double floorl (long double x) => generic_success;
+double fmod  (double numer , double denom) => generic_success;
+float fmodf (float numer , float denom) => generic_success;
+long double fmodl (long double numer, long double denom) => generic_success;
+double fabs  (double x) => generic_success;
+float fabsf (float x) => generic_success;
+long double fabsl (long double x) => generic_success;
+double abs (double x) => generic_success;
+--float abs (float x) => generic_success;
+--long double abs (long double x) => generic_success;
+
+--
+-- wctype.h
+--
+wint_t generate_wint_t() => generic_success;
+int iswalnum (wint_t c) => generic_success;
+int iswalpha (wint_t c) => generic_success;
+int iswcntrl (wint_t c) => generic_success;
+int iswdigit (wint_t c) => generic_success;
+int iswgraph (wint_t c) => generic_success;
+int iswlower (wint_t c) => generic_success;
+int iswprint (wint_t c) => generic_success;
+int iswpunct (wint_t c) => generic_success;
+int iswspace (wint_t c) => generic_success;
+int iswupper (wint_t c) => generic_success;
+int iswxdigit (wint_t c) => generic_success;
+wint_t towlower ( wint_t c ) => generic_success;
+wint_t towupper (wint_t c) => generic_success;
+
+
+--
+-- ctype.h
+--
+int isalnum ( int c ) => generic_success;
+int isalpha ( int c ) => generic_success;
+int isblank ( int c ) => generic_success;
+int iscntrl ( int c ) => generic_success;
+int isgraph ( int c ) => generic_success;
+int islower ( int c ) => generic_success;
+int isprint ( int c ) => generic_success;
+int ispunct ( int c ) => generic_success;
+int isspace ( int c ) => generic_success;
+int isupper ( int c ) => generic_success;
+int isxdigit ( int c ) => generic_success;
+int tolower ( int c ) => generic_success;
+int toupper ( int c ) => generic_success;
+
+--
+-- stdlib.h
+--
+double atof_wrapper (struct my_ptr* str) => generic_success;
+int atoi_wrapper(struct my_ptr* str) => generic_success;
+long int atol_wrapper ( struct my_ptr* str ) => generic_success;
+double strtod_wrapper (struct my_ptr* str) => generic_success;
+long int strtol_wrapper (struct my_ptr* str) => generic_success;
+unsigned long int strtoul_wrapper (struct my_ptr* str) => generic_success;
+struct my_ptr* getenv_wrapper (struct my_ptr* str) => generic_success;
+
+
+div_t div_wrapper (int numer, int denom) => generic_success;
+long int labs (long int n) => generic_success;
+ldiv_t ldiv_wrapper (long int numer, long int denom) => generic_success;
+int mblen_wrapper (struct my_ptr* str) => generic_success;
+int mbtowc_wrapper (struct my_ptr* str) => generic_success;
+int wctomb_wrapper (struct my_ptr* str) => generic_success;
+struct my_ptr* mbstowcs_wrapper(struct my_ptr* src) => generic_success;
+--
+-- string.h
+--
+
+-- generators and casts
+struct my_ptr* generate_str() => generic_not_null;
+void*       char_ptr_to_void_ptr(char* a) => generic_not_null;
+-- wrappers
+void memcpy_wrapper(struct my_ptr* ptr,int num) 	=> generic_success;
+struct my_ptr * memmove_wrapper(struct my_ptr* ptr, int num) => generic_success;
+void strcpy_wrapper (struct my_ptr* ptr ) 				=> generic_success;
+void 		strncpy_wrapper( const char * source{UNIQUE}, size_t num ) 	=> generic_not_zero;
+
+struct my_ptr * strcat_wrapper ( struct my_ptr * dst, struct my_ptr * src ) => generic_success;
+struct my_ptr *strncat_wrapper ( struct my_ptr * dst, struct my_ptr * src, size_t num ) => generic_success;
+
+int memcmp_wrapper ( struct my_ptr * ptr1, struct my_ptr * ptr2, size_t num ) => generic_success;
+int strcmp_wrapper ( struct my_ptr * ptr1, struct my_ptr * ptr2 ) => generic_success;
+int strcoll_wrapper ( struct my_ptr * ptr1, struct my_ptr * ptr2 ) => generic_success;
+int strncmp_wrapper ( struct my_ptr * ptr1, struct my_ptr * ptr2, size_t num ) => generic_success;
+void strxfrm_wrapper (struct my_ptr * src) => generic_success;
+
+--struct my_ptr* memset_wrapper (int value, size_t num ) => generic_success;									=> generic_success;
+
+
+void memchr_wrapper ( struct my_ptr * src, int val, int num) => generic_success;
+void strchr_wrapper ( struct my_ptr * src, int character) => generic_success;
+void strcspn_wrapper ( struct my_ptr * str1, struct my_ptr * str2 ) => generic_success;
+void strpbrk_wrapper ( struct my_ptr * str1, struct my_ptr * str2) => generic_success;
+void strrchr_wrapper ( struct my_ptr * str, int character) => generic_success;
+void strspn_wrapper ( struct my_ptr * str1, struct my_ptr * str2 ) => generic_success;
+void strstr_wrapper ( struct my_ptr * str1, struct my_ptr * str2) => generic_success;
+void strtok_wrapper ( struct my_ptr * str, struct my_ptr * delimiters )=> generic_success;
+struct my_ptr* strerror_wrapper (int  ) => generic_success;		
+
+int strlen_wrapper (struct my_ptr * src) => generic_success;
+
+--char *strcasestr(char *, char *) => generic_success; --it was already here!
+
+
+--
+--time.h
+--
+
+-- generators
+clock_t    clock(void)=> generic_success;
+
+-- still crashes...
+--
+
+--struct my_ptr* strftime_wrapper(struct my_ptr* format,struct tm* timeptr ) => generic_success;
+
+--it used to crash!
+-- 
+
+struct my_ptr* ctime_wrapper(time_t * a) => generic_success;
+
+struct my_ptr* ctime_r_wrapper(time_t * a) => generic_success;
+struct tm *localtime_r_wrapper(const time_t * timep) => generic_success;
+struct my_ptr* strptime_wrapper(const char * format,struct tm * tm) => generic_success;
+time_t mktime_wrapper(struct tm * tm) => generic_success;
+struct my_ptr* asctime_r_wrapper(const struct tm * tm) => generic_success;
+struct tm *localtime_wrapper(const time_t * t) => generic_success;
+struct tm *gmtime_r_wrapper(const time_t *timep) => generic_success;
+struct tm *getdate_wrapper(struct my_ptr* ptr) => generic_success;
+struct tm *gmtime_wrapper(const time_t * t) => generic_success;
+
+-- it does not crash yet!
+--
 time_t *generate_time_t() => generic_success;
 
-time_t time(time_t *) => generic_not_zero;
-char *asctime(struct tm *) => generic_not_null;
-char *asctime_r(struct tm *, char *) => generic_not_null;
+struct my_ptr* asctime_wrapper() => generic_success;
 
-char *ctime(time_t *) => generic_not_zero;
-char *ctime_r(time_t *, char *) => generic_not_null;
+int        clock_getcpuclockid(pid_t, clockid_t *)=> generic_success;
+int        clock_getres(clockid_t, struct timespec *)=> generic_success;
+int        clock_gettime(clockid_t, struct timespec *)=> generic_success;
+int        clock_nanosleep(clockid_t, int, const struct timespec *, struct timespec *)=> generic_success;
+int        clock_settime(clockid_t, const struct timespec *)=> generic_success;
 
-struct tm *gmtime(time_t *) => generic_not_null;
-struct tm *gmtime_r(time_t *, struct tm *) => generic_not_null;
-struct tm *localtime(time_t *) => generic_not_null;
-struct tm *localtime_r(time_t *, struct tm *) => generic_not_null;
+double     difftime(time_t, time_t) => generic_success;
 
-time_t mktime(struct tm *) => generic_not_null;
+int        nanosleep(const struct timespec *, struct timespec *) => generic_success;
+size_t     strftime_l(char *restrict, size_t, const char *restrict,
+               const struct tm *restrict, locale_t) => generic_success;
+time_t     time(time_t *) => generic_success;
+int        timer_create(clockid_t, struct sigevent *restrict,
+               timer_t *restrict) => generic_success;
+int        timer_delete(timer_t) => generic_success;
+int        timer_getoverrun(timer_t) => generic_success;
+int        timer_gettime(timer_t, struct itimerspec *) => generic_success;
+int        timer_settime(timer_t, int, const struct itimerspec *restrict,
+               struct itimerspec *restrict) => generic_success;
+void       tzset(void) => generic_success;
 
--- wrapper for strftime(3)
-char *strftime_wrapper(struct tm *) => generic_not_null;
--- int getdate_r(char *, struct tm *) => generic_success;
-
--- string
-
-char *strstr(char *, char *) => generic_void;
-char *strcasestr(char *, char *) => generic_void;
-char *strcmp(char *, char *) => generic_void;
 
 -- netdb
 
--- struct hostent *gethostbyname(char *name) => generic_not_null;
+--struct hostent *gethostbyname(char *name) => generic_not_null;

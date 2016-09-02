@@ -98,13 +98,13 @@ def p_args(t):
     t[0] = [t[1]] + t[0]
 
 def p_arg_wrapper(t):
-    '''arg_wrapper : RESTRICT arg
+    '''arg_wrapper : arg RESTRICT
                    | arg'''
     if len(t) == 2:
         t[0] = t[1]
     else:
-        t[2][1].append('UNIQUE')
-        t[0] = t[2]
+        t[1][1].append('UNIQUE')
+        t[0] = t[1]
 def p_arg(t):
     '''arg : type STRING var_flags
            | type var_flags'''
@@ -160,11 +160,17 @@ def p_user_definied_type(t):
         t[0] = t[1]
 
 def p_struct_things(t):
-    '''struct_things : TYPE_QUALIFIER STRING
+    '''struct_things : TYPE_QUALIFIER STRUCT STRING
+                     | TYPE_QUALIFIER STRUCT STRING ptr_list
+                     | TYPE_QUALIFIER STRING
                      | STRUCT STRING
 					 | UNION STRING
                      | STRING'''
-    if len(t) == 2 :
+    if len(t) == 5:
+        t[0] = (t[1],(t[2],(t[3],t[4])))
+    elif len(t) == 4:
+        t[0] = (t[1],(t[2],(None,t[3])))
+    elif len(t) == 2 :
         t[0] = (None,t[1])
     else:
         t[0] = (t[1],(None,t[2]))
