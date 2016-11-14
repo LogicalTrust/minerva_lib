@@ -14,5 +14,9 @@
 
 #define minerva_assert(X) assert(X);
 
+#else
+
+#define minerva_assert(X) do { } while(0);
+
 #endif /* ! MINERVA_DEBUG */
 #endif /* ! _MINERVA_ASSERT_H_ */

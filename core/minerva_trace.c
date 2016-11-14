@@ -117,9 +117,8 @@ minerva_trace_save(minerva_trace_t *trace, const char *filename)
         return;
     }
 
-#ifdef MINERVA_DEBUG
-    fprintf(stderr, "saving %u calls in a trace\n", trace->calls_num);
-#endif
+    if (VERBOSE_LEVEL(VERBOSE_NOISY)) 
+    	fprintf(stderr, "saving %u calls in a trace\n", trace->calls_num);
 
     TAILQ_FOREACH(call, trace->calls, entries) {
         fprintf(f, "%u = %s(", call->result_id, call->func->name);
@@ -170,15 +169,12 @@ minerva_trace_restore(const char *filename, minerva_funcs_t* funcs)
                     &fuzz_call->arg_ids[i], args_string);
         }
 
-#ifdef MINERVA_DEBUG
        minerva_assert(i == fuzz_call->func->arg_num);
-#endif
        TAILQ_INSERT_TAIL(trace->calls, fuzz_call, entries);
     }
 
-#ifdef MINERVA_DEBUG
+    if (VERBOSE_LEVEL(VERBOSE_NOISY))
        fprintf(stderr, "imported a trace of %u calls\n", trace->calls_num);
-#endif
     free(line);
     fclose(f);
 

@@ -114,11 +114,9 @@ minerva_vars_destroy(minerva_vars_t *vars)
         }
     }
 
-#ifdef MINERVA_DEBUG
     for (i = 0; i < __minerva_types_no; i++) {
         minerva_assert(vars->len[i] == 0);
     }
-#endif
 
     free(vars->len);
     free(vars->vars);

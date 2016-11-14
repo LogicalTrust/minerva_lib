@@ -23,12 +23,10 @@ minerva_call(minerva_vars_t *vars, minerva_var_t *new_var,
 {
     int i;
 
-#ifdef MINERVA_DEBUG
     minerva_assert(new_var != NULL);
     minerva_assert(call_func != NULL);
     minerva_assert((call_func->arg_num > 0 && call_vars != NULL) ||
       call_func->arg_num == 0);
-#endif 
 
     if (VERBOSE_LEVEL(VERBOSE_NOISY)) {
         fprintf(stderr, "(");
@@ -77,9 +75,7 @@ minerva_random_call(minerva_vars_t *vars, minerva_funcs_t *funcs,
         fprintf(stderr, "calling %s", call_func->name);
     }
 
-#ifdef MINERVA_DEBUG
     minerva_assert(call_func != NULL);
-#endif
 
     if (call_func->arg_num > 0)
         call_vars = xcalloc(call_func->arg_num, sizeof(*call_vars));
@@ -124,10 +120,8 @@ minerva_random_call(minerva_vars_t *vars, minerva_funcs_t *funcs,
         } 
     }
     
-#ifdef MINERVA_DEBUG
     for (i = 0; i < call_func->arg_num; i++) 
         minerva_assert(call_vars[i] != NULL);
-#endif
 
     new_var = minerva_var_new(vars, call_func->return_type, 0);
     minerva_trace_record(trace, new_var, call_func, call_vars);

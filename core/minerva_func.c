@@ -124,9 +124,7 @@ minerva_func_get(minerva_funcs_t *funcs, minerva_vars_t *vars, int mutate)
         }
     }
     ret = func_arr[rand() % n];
-#ifdef MINERVA_DEBUG
     minerva_assert(ret != NULL);
-#endif
 
     return ret;
 }
@@ -142,9 +140,7 @@ minerva_func_find(minerva_funcs_t *funcs, const char *name)
         }
     }
 
-#ifdef MINERVA_DEBUG
     minerva_assert(ret != NULL);
-#endif
 
     return ret;
 }
