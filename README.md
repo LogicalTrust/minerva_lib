@@ -248,6 +248,7 @@ A: We don't know. However, You're more than welcome to develop it on your own an
 
 1. http://php-security.org/2010/05/11/mops-submission-05-the-minerva-php-fuzzer/
 2. http://www.slideshare.net/logicaltrust/torturing-the-php-interpreter
+3. http://akat1.pl/talks/2016-alligatorcon.pdf
 
 ## Credits
 
