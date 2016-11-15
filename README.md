@@ -120,7 +120,7 @@ Makefile also supports a few parameters, as follows:
 
 Fuzzing should be as easy as running compiled binary.
 
-    target/toy/ $ lldb ./bin/minerva-toy-toy
+    target/toy/ $ ./bin/minerva-toy-toy
     seed: 2946546160
     \o/ found crash *yay* \o/
     
