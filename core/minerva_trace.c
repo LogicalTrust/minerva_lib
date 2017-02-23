@@ -22,7 +22,9 @@
 #include <minerva_signal.h>
 #include <minerva_repl.h>
 
+#ifdef WITH_PROGRESSBAR
 #include <progressbar.h>
+#endif /* ! WITH_PROGRESSBAR */
 
 static jmp_buf segv_env;
 
@@ -62,14 +64,18 @@ minerva_trace_play(minerva_trace_t *trace)
     minerva_fuzz_call_t *call;
     minerva_var_t *new_var;
     minerva_var_t **args;
+#ifdef PROGRESS_BAR
     progressbar *progress;
+#endif /* !PROGRESS_BAR */
     int i;
     int r = R_PLAY_NOTCRASHED;
 
 
     vars = minerva_vars_new();
 
+#ifdef PROGRESS_BAR
     progress = progressbar_new("Replay", trace->calls_num);
+#endif /* !PROGRESS_BAR */
 
 
     if (setjmp(segv_env)) {
@@ -93,12 +99,16 @@ minerva_trace_play(minerva_trace_t *trace)
                 assert(args[i] != NULL);
             }
 
-                        minerva_call(vars, new_var, call->func, args);
+            minerva_call(vars, new_var, call->func, args);
+#ifdef PROGRESS_BAR
             progressbar_inc(progress);
+#endif /* !PROGRESS_BAR */
         }
     }
 
+#ifdef PROGRESS_BAR
     progressbar_finish(progress);
+#endif /* !PROGRESS_BAR */
     minerva_signal_revert();
 
     return r;

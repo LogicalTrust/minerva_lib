@@ -13,8 +13,10 @@
 #include <assert.h>
 #include <limits.h>
 
+#ifdef WITH_READLINE
 #include <readline/readline.h>
 #include <readline/history.h>
+#endif /* WITH_READLINE */
 
 #include <minerva_loop.h>
 #include <minerva_colors.h>
@@ -479,7 +481,18 @@ minerva_repl(void)
     vars = minerva_dict_create();
 
     for(;;) {
+#ifdef WITH_READLINE
         input = readline(ANSI_COLOR_RED "pfl> " ANSI_COLOR_RESET);
+#else /* !WITH_READLINE */
+        size_t n;
+        input = NULL;
+        printf(ANSI_COLOR_RED "pfl> " ANSI_COLOR_RESET);
+        fflush(stdout);
+        if (getline(&input, &n, stdin) == -1) {
+            minerva_repl_error("getline() failed");
+            continue;
+        }
+#endif /* WITH_READLINE */
         if (!input)
             break;
         if (strlen(input) > 0) {
@@ -487,7 +500,9 @@ minerva_repl(void)
             if (line != NULL)
                 minerva_repl_eval_line(vars, line);
             minerva_repl_line_destroy(line);
+#ifdef WITH_READLINE
             add_history(input);
+#endif /* WITH_READLINE */
         }
         free(input);
     }

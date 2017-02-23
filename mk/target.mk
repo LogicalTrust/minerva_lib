@@ -57,8 +57,6 @@ $(LOCAL_OBJ): $(LOCALWRKDIR)/%.o : %.c
 localdir:
 	@mkdir -p $(LOCALWRKDIR)
 
-LDFLAGS+=../../lib/progressbar/libprogressbar.a -lreadline -lcurses
-
 link: link_start $(WRKDIR)/$(OUTFILE)
 
 .PHONY: link_start

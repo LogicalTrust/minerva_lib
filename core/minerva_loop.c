@@ -18,7 +18,9 @@
 #include <minerva_signal.h>
 #include <xmalloc.h>
 
+#ifdef WITH_PROGRESSBAR
 #include <progressbar.h>
+#endif /* !WITH_PROGRESSBAR */
 
 static jmp_buf sig_env;
 
@@ -28,14 +30,18 @@ minerva_loop(unsigned int iter, minerva_vars_t **vars,
 {
     int crash = 0, forever = 0;
     unsigned int i;
+#ifdef WITH_PROGRESSBAR
     progressbar *progress;
+#endif /* !WITH_PROGRESSBAR */
 
     if (iter == 0)
         forever = 1;
 
     if (forever == 0 && !VERBOSE_LEVEL(VERBOSE_NOISY))
+#ifdef WITH_PROGRESSBAR
         progress = progressbar_new(mutate == 0 ? "Fuzzing" : "Mutating",
           iter);
+#endif /* !WITH_PROGRESSBAR */
 
     if (*vars == NULL)
         *vars = minerva_vars_new();
@@ -58,6 +64,7 @@ minerva_loop(unsigned int iter, minerva_vars_t **vars,
             if (exit_loop)
                 break;
             minerva_random_call(*vars, *funcs, *trace, mutate);
+#ifdef WITH_PROGRESSBAR
             if (forever == 0 && !VERBOSE_LEVEL(VERBOSE_NOISY)) {
                 if (iter/100 == 0)
                     progressbar_inc(progress);
@@ -65,13 +72,16 @@ minerva_loop(unsigned int iter, minerva_vars_t **vars,
                     progressbar_update(progress, i);
                 }
             }
+#endif /* !WITH_PROGRESSBAR */
         }
     }
 
+#ifdef WITH_PROGRESSBAR
     if (forever == 0 && !VERBOSE_LEVEL(VERBOSE_NOISY)) {
         progressbar_update(progress, iter);
         progressbar_finish(progress);
     }
+#endif /* !WITH_PROGRESSBAR */
 
     if (crash) {
         printf(ANSI_COLOR_GREEN "\\o/ found crash *yay* \\o/"

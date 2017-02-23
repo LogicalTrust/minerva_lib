@@ -115,6 +115,8 @@ Makefile also supports a few parameters, as follows:
  - DEBUG=1 - build without optimizations, additional debug features are
    turned on. 
  - ASAN=1 - build with address sanitizer
+ - WITHOUT_READLINE=1 - build without readline library
+ - WITHOUT_PROGRESSBAR=1 - build without progressbar library
 
 ## Fuzzing
 

@@ -19,6 +19,20 @@ COREDIR=../../core/
 
 CFLAGS+=-I../../include/ -Wall -O0 -I$(TARGETWRKDIR)
 
+#default options
+WITH_READLINE=1
+WITH_PROGRESSBAR=1
+
+ifndef WITHOUT_READLINE
+CFLAGS+=-DWITH_READLINE
+LDFLAGS+=-lreadline -lcurses
+endif
+
+ifndef WITHOUT_PROGRESSBAR
+CFLAGS+=-DWITH_PROGRESSBAR
+LDFLAGS+=../../lib/progressbar/libprogressbar.a -lcurses
+endif
+
 ifdef ASAN
 CFLAGS+=-fsanitize=address
 #XXX: fix building on gcc
