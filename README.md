@@ -248,9 +248,9 @@ A: We don't know. However, You're more than welcome to develop it on your own an
 
 ## Reading material
 
-1. http://php-security.org/2010/05/11/mops-submission-05-the-minerva-php-fuzzer/
-2. http://www.slideshare.net/logicaltrust/torturing-the-php-interpreter
-3. http://akat1.pl/talks/2016-alligatorcon.pdf
+1. http://akat1.pl/talks/2016-alligatorcon.pdf - slides about minerva_lib itself
+2. http://php-security.org/2010/05/11/mops-submission-05-the-minerva-php-fuzzer/ - text about minerva algorithm
+3. http://www.slideshare.net/logicaltrust/torturing-the-php-interpreter - slides that contains something about minerva algorithm
 
 ## Credits
 
