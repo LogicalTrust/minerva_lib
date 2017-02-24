@@ -37,8 +37,8 @@ minerva_loop(unsigned int iter, minerva_vars_t **vars,
     if (iter == 0)
         forever = 1;
 
-    if (forever == 0 && !VERBOSE_LEVEL(VERBOSE_NOISY))
 #ifdef WITH_PROGRESSBAR
+    if (forever == 0 && !VERBOSE_LEVEL(VERBOSE_NOISY))
         progress = progressbar_new(mutate == 0 ? "Fuzzing" : "Mutating",
           iter);
 #endif /* !WITH_PROGRESSBAR */
