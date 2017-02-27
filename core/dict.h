@@ -1,5 +1,3 @@
-/* $Id: dict.h,v 1.13 2011/04/03 15:09:33 mkocielski Exp $ */
-
 /*
  * Copyright (c) 2010, 2011 Mateusz Kocielski
  *
