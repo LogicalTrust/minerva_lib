@@ -68,8 +68,6 @@ def main():
     while input_files != []:
         (input_file, local) = input_files.pop()
 
-        print input_file, local
-
         input_content = None
         paths = config['include_path'] if not local else ['./']
         for path in paths:
