@@ -2,8 +2,6 @@
 #include <math.h>
 #include <minerva_generic.h>
 
-#include <cast.h>
-
 --
 -- CASTS
 --
