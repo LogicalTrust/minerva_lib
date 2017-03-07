@@ -49,7 +49,8 @@ minerva_trace_record(minerva_trace_t *trace, minerva_var_t *new_var,
     fuzz_call->result_id = new_var->id;
     fuzz_call->arg_ids = NULL;
     if (func->arg_num > 0) {
-        fuzz_call->arg_ids = xcalloc(func->arg_num, sizeof(func->arg_num));
+        fuzz_call->arg_ids = xcalloc(func->arg_num,
+          sizeof(fuzz_call->arg_ids[0]));
     }
     for (i = 0; i < func->arg_num; ++i) {
         fuzz_call->arg_ids[i] = args[i]->id;
