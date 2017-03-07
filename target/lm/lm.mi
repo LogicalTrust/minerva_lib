@@ -2,12 +2,7 @@
 #include <math.h>
 #include <minerva_generic.h>
 
---
--- CASTS
---
-
-float double_to_float(double) => generic_success;
-double float_to_double(float) => generic_success;
+%include <cast.mi>
 
 --
 -- MATH
