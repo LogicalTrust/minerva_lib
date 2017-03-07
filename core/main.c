@@ -67,7 +67,7 @@ main(int argc, char **argv)
 {
     int ch;
     char *trace_filename = NULL, *play_filename = NULL;
-    char handle_sigsegv = 0, repl = 0, mutate = 0;
+    char handle_sigsegv = 0, repl = 0, mutate = 0, handle_sigint = 1;
     unsigned int iter = 0;
     uint32_t seed;
     minerva_vars_t *vars = NULL;
@@ -81,7 +81,7 @@ main(int argc, char **argv)
     seed = arc4random();
 #endif
 
-    while ((ch = getopt(argc, argv, "hi:s:SrT:p:M")) != -1) {
+    while ((ch = getopt(argc, argv, "hi:s:SrT:p:MCv")) != -1) {
         switch (ch) {
         case 'h':
             usage(EXIT_SUCCESS);
@@ -95,6 +95,9 @@ main(int argc, char **argv)
             break;
         case 'M':
             mutate = 1;
+        case 'C':
+            handle_sigint = 0;
+            break;
         case 'S':
             handle_sigsegv = 1;
             break;
@@ -107,6 +110,9 @@ main(int argc, char **argv)
         case 'p':
             play_filename = xstrdup(optarg);
             break;
+        case 'v':
+            verbose++;
+            break;
         default:
             usage(EXIT_FAILURE);
             /*NOTREACHED*/
@@ -116,10 +122,12 @@ main(int argc, char **argv)
     printf("seed: %u\n", seed);
     srand(seed);
 
-    /* signal handlers - ^C - SIGINT */
-    if (signal(SIGINT, sigint_handler) == SIG_ERR) {
-        fprintf(stderr, "can't install signal handler\n");
-        exit(EXIT_FAILURE);
+    if (handle_sigint == 1) {
+        /* signal handlers - ^C - SIGINT */
+        if (signal(SIGINT, sigint_handler) == SIG_ERR) {
+            fprintf(stderr, "can't install signal handler\n");
+            exit(EXIT_FAILURE);
+        }
     }
 
     if (handle_sigsegv == 1) {
