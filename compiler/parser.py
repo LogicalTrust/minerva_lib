@@ -74,7 +74,8 @@ def p_include(t):
     t[0] = ('include', t[2])
 
 def p_miinclude(t):
-    '''miinclude : MIINCLUDE INCLUDEFILELOCAL'''
+    '''miinclude : MIINCLUDE INCLUDEFILE
+                 | MIINCLUDE INCLUDEFILELOCAL'''
 
     t[0] = ('miinclude', t[2])
 
