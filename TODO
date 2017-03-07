@@ -8,3 +8,4 @@ TODO:
  * write (better/any) documentation
  * split fuzzing and shell stuff (into separate processes)
  * fix redundancy between minerva_loop & minerva_trace
+ * variadic functions?
