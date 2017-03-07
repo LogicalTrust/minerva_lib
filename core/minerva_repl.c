@@ -490,7 +490,7 @@ minerva_repl(void)
         fflush(stdout);
         if (getline(&input, &n, stdin) == -1) {
             minerva_repl_error("getline() failed");
-            continue;
+            break;
         }
 #endif /* WITH_READLINE */
         if (!input)
