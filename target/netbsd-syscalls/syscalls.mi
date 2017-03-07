@@ -1,0 +1,143 @@
+#include <minerva_generic.h>
+#include "rump-syscalls.h"
+
+-- mutators
+
+%include <mutate.mi>
+
+-- DUMMY
+
+int zero() => generic_success;
+int add_one(int x) => generic_success;
+
+-- HELPERS
+
+char *empty(int x) => generic_not_null;
+char *randstr(int x) => generic_not_null;
+int *get_int() => generic_not_null;
+
+-- SYSCALLS
+
+int filter_write(int, char *, int) => generic_success;
+int filter_read(int, char *, int) => generic_success;
+int rump___sysimpl_close(int) => generic_success;
+int rump___sysimpl_fchdir(int) => generic_success;
+void rump___sysimpl_sync() => generic_success;
+int rump___sysimpl_open(char *, int, int, int) => generic_success;
+int rump___sysimpl_kqueue() => generic_success;
+int rump___sysimpl_faccessat(int, char *, int, int) => generic_success;
+int rump___sysimpl_fchmodat(int, char *, int, int) => generic_success;
+int rump___sysimpl_fchownat(int, char *, int, int, int) => generic_success;
+int rump___sysimpl_fstatat(int, char *, struct stat *, int) => generic_success;
+int rump___sysimpl_utimensat(int, char *, struct timespec *, int) => generic_success;
+int rump___sysimpl_link(char *, char *) => generic_success;
+int rump___sysimpl_unlink(char *) => generic_success;
+int rump___sysimpl_chdir(char *) => generic_success;
+int rump___sysimpl_chmod(char *, int) => generic_success;
+int rump___sysimpl_chown(char *, int, int) => generic_success;
+int rump___sysimpl_getpid() => generic_success;
+int rump___sysimpl_unmount(char *, int) => generic_success;
+int rump___sysimpl_setuid(int) => generic_success;
+int rump___sysimpl_getuid() => generic_success;
+int rump___sysimpl_geteuid() => generic_success;
+int rump___sysimpl_recvmsg(int, struct msghdr *, int) => generic_success;
+int rump___sysimpl_sendmsg(int, struct msghdr *, int) => generic_success;
+-- int rump___sysimpl_recvfrom(int, char *, int, int, struct sockaddr *, socklen_t *) => generic_success;
+-- int rump___sysimpl_accept(int, struct sockaddr *, socklen_t *) => generic_success;
+-- int rump___sysimpl_getpeername(int, struct sockaddr *, socklen_t *) => generic_success;
+-- int rump___sysimpl_getsockname(int, struct sockaddr *, socklen_t *) => generic_success;
+int rump___sysimpl_access(char *, int) => generic_success;
+int rump___sysimpl_chflags(char *, long) => generic_success;
+int rump___sysimpl_fchflags(int, long) => generic_success;
+int rump___sysimpl_getppid() => generic_success;
+int rump___sysimpl_dup(int) => generic_success;
+int rump___sysimpl_getegid() => generic_success;
+int rump___sysimpl_ktrace(char *, int, int, int) => generic_success;
+int rump___sysimpl_getgid() => generic_success;
+int rump___sysimpl___getlogin(char *, int) => generic_success;
+int rump___sysimpl___setlogin(char *) => generic_success;
+int rump___sysimpl_flock(int, int) => generic_success;
+int rump___sysimpl_setsid() => generic_success;
+int rump___sysimpl_socket30(int, int, int) => generic_success;
+int rump___sysimpl_dup3(int, int, int) => generic_success;
+int rump___sysimpl_kqueue1(int) => generic_success;
+int rump___sysimpl_issetugid() => generic_success;
+int rump___sysimpl_fchroot(int) => generic_success;
+int rump___sysimpl_setgid(int) => generic_success;
+int rump___sysimpl_setegid(int) => generic_success;
+-- int rump___sysimpl_reboot(int, char *) => generic_success;
+int rump___sysimpl_seteuid(int) => generic_success;
+int rump___sysimpl_shutdown(int, int) => generic_success;
+int rump___sysimpl_fdatasync(int) => generic_success;
+int rump___sysimpl_socketpair(int, int, int, int *) => generic_success;
+int rump___sysimpl_ftruncate(int, int) => generic_success;
+int rump___sysimpl_fchown(int, int, int) => generic_success;
+int rump___sysimpl_fchmod(int, int) => generic_success;
+int rump___sysimpl_setreuid(int, int) => generic_success;
+int rump___sysimpl_setregid(int, int) => generic_success;
+int rump___sysimpl_rename(char *, char *) => generic_success;
+int rump___sysimpl_mkfifo(char *, int) => generic_success;
+int rump___sysimpl___posix_chown(char *, int, int) => generic_success;
+int rump___sysimpl___posix_fchown(int, int, int) => generic_success;
+int rump___sysimpl___posix_lchown(char *, int, int) => generic_success;
+int rump___sysimpl_getsid(int) => generic_success;
+int rump___sysimpl_revoke(char *) => generic_success;
+int rump___sysimpl_fktrace(int, int, int, int) => generic_success;
+-- ?? int rump___sysimpl_pipe(int *) => generic_success; 
+int rump___sysimpl_posix_fallocate(int, int, int) => generic_success;
+int rump___sysimpl_fdiscard(int, int, int) => generic_success;
+int rump___sysimpl___quotactl(char *, struct quotactl_args *) => generic_success;
+int rump___sysimpl_unlinkat(int, char *, int) => generic_success;
+int rump___sysimpl_futimens(int, struct timespec *) => generic_success;
+int rump___sysimpl_recvmmsg(int, struct mmsghdr *, int, int, struct timespec *) => generic_success;
+int rump___sysimpl_sendmmsg(int, struct mmsghdr *, int, int) => generic_success;
+int rump___sysimpl_clock_nanosleep(clockid_t, int, struct timespec *, struct timespec *) => generic_success;
+int rump___sysimpl_chroot(char *) => generic_success;
+int rump___sysimpl_symlink(char *, char *) => generic_success;
+int rump___sysimpl_readlink(char *, char *, int) => generic_success;
+int rump___sysimpl_umask(int) => generic_success;
+int rump___sysimpl_dup2(int, int) => generic_success;
+-- int rump___sysimpl_fcntl(int, int, int, int, int, int) => generic_success;
+int rump___sysimpl_listen(int, int) => generic_success;
+int rump___sysimpl_fsync(int) => generic_success;
+int rump___sysimpl_getpgrp() => generic_success;
+int rump___sysimpl_setpgid(int, int) => generic_success;
+int rump___sysimpl_getgroups(int, int *) => generic_success;
+int rump___sysimpl_setgroups(int, int *) => generic_success;
+int rump___sysimpl_pathconf(char *, int) => generic_success;
+int rump___sysimpl_fpathconf(int, int) => generic_success;
+int rump___sysimpl_pread(int, char *, int, int) => generic_success;
+int rump___sysimpl_pwrite(int, char *, int, int) => generic_success;
+int rump___sysimpl_truncate(char *, int) => generic_success;
+int rump___sysimpl_lseek(int, int, int) => generic_success;
+int rump___sysimpl_getpgid(int) => generic_success;
+int rump___sysimpl_mkdir(char *, int) => generic_success;
+int rump___sysimpl_rmdir(char *) => generic_success;
+-- int rump___sysimpl_utimes(char *, struct timeval *) => generic_success;
+int rump___sysimpl_fsync_range(int, int, int, int) => generic_success;
+--int rump___sysimpl_utrace(char *, char *, size_t) => generic_success;
+-- int rump___sysimpl_getfh(char *, char *, int *) => generic_success;
+-- int rump___sysimpl_nfssvc(int, char *) => generic_success;
+-- int rump___sysimpl_modctl(int, char *) => generic_success;
+int rump___sysimpl___getcwd(char *, int) => generic_success;
+int rump___sysimpl_ioctl(int, int, int, int, int, int) => generic_success;
+-- int rump___sysimpl_lio_listio(int, struct aiocb **, int, struct sigevent *) => generic_success;
+-- int rump___sysimpl_mount(char *, char *, int, char *, int) => generic_success;
+-- int rump___sysimpl_posix_fadvise(int, int, int, int) => generic_success;
+-- int rump___sysimpl_gettimeofday(struct timeval *, char *) => generic_success;
+-- int rump___sysimpl_settimeofday(struct timeval *, char *) => generic_success;
+-- int rump___sysimpl_adjtime(struct timeval *, struct timeval *) => generic_success;
+-- int rump___sysimpl_setitimer(int, struct itimerval *, struct itimerval *) => generic_success;
+-- int rump___sysimpl_getitimer(int, struct itimerval *) => generic_success;
+-- int rump___sysimpl_clock_gettime(clockid_t, struct timespec *) => generic_success;
+-- int rump___sysimpl_clock_settime(clockid_t, struct timespec *) => generic_success;
+-- int rump___sysimpl_clock_getres(clockid_t, struct timespec *) => generic_success;
+-- int rump___sysimpl_nanosleep(struct timespec *, struct timespec *) => generic_success;
+-- int rump___sysimpl_aio_suspend(struct aiocb **, int, struct timespec *) => generic_success;
+-- int rump___sysimpl_timer_settime(timer_t, int, struct itimerspec *, struct itimerspec *) => generic_success;
+-- int rump___sysimpl_timer_gettime(timer_t, struct itimerspec *) => generic_success;
+-- int rump___sysimpl_mknod(char *, int, dev_t) => generic_success;
+-- int rump___sysimpl_pipe2(int *, int) => generic_success;
+-- int rump___sysimpl_getdents(int, char *, int) => generic_success;
+
+
