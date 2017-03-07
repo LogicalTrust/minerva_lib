@@ -31,7 +31,7 @@ $(TARGET_OBJS): $(TARGETWRKDIR)/target.c $(TARGETWRKDIR)/target.h
 	$(CC) $(CFLAGS) -I. -c -o $@ $<
 
 $(TARGETWRKDIR)/target.c $(TARGETWRKDIR)/target.h: $(MICONFIG)
-	$(MICOMPILER) -m $(MICONFIG) -o $(TARGETWRKDIR)/target
+	$(MICOMPILER) -m $(MICONFIG) -o $(TARGETWRKDIR)/target $(MIFLAGS)
 
 .PHONY: targetdir
 targetdir:
