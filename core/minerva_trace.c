@@ -173,7 +173,7 @@ minerva_trace_restore(const char *filename, minerva_funcs_t* funcs)
         fuzz_call->arg_ids = NULL;
         if (fuzz_call->func->arg_num > 0) {
             fuzz_call->arg_ids = xcalloc(fuzz_call->func->arg_num, 
-                    sizeof(fuzz_call->func->arg_num));
+                    sizeof(fuzz_call->arg_ids[0]));
         }
         for (i = 0; i < fuzz_call->func->arg_num; ++i) {
             sscanf(args_string, "%u %*[, ] %511[^\n]",
