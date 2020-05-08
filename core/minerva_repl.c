@@ -43,6 +43,7 @@ repl_help(int argc, minerva_dict_var_t **args)
       "save(trace, \"filename\") - saves trace to file\n"
       "min(trace, [rounds]) - minimizes trace, rounds limit iteration\n"
       "show(trace) - shows trace\n"
+      "str, stringify(trace, num) - stringify variable num from trace\n"
       "verbose(num) - set verbose level 0 - normal, 1 - noisy, 2+ debug\n"
       "quit, exit - quits\n");
 
