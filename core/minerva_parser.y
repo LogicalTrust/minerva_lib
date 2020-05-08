@@ -27,7 +27,7 @@ static int p_error = 0;
 
 %start ASSIGN
 
-%error-verbose
+%define parse.error verbose
 
 %union {
     int     ival;
