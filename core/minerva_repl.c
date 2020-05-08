@@ -25,6 +25,7 @@
 #include <minerva_parser.h>
 #include <minerva_trace.h>
 #include <minerva_dict.h>
+#include <minerva_var.h>
 #include <xmalloc.h>
 
 int verbose = VERBOSE_NORMAL;
@@ -316,6 +317,46 @@ repl_min(int argc, minerva_dict_var_t **args)
     return r;
 }
 
+static minerva_dict_var_t *
+repl_stringify(int argc, minerva_dict_var_t **args)
+{
+    size_t i;
+    minerva_var_t *var = NULL;
+    minerva_dict_var_result_t *result;
+    unsigned int n;
+    char *stringified;
+
+    if (args[0]->type != MINERVA_RESULT_T) {
+        minerva_repl_error("type mismatch");
+        return NULL;
+    }
+
+    if (args[1]->type != MINERVA_NUMBER_T) {
+        minerva_repl_error("type mismatch");
+        return NULL;
+    }
+
+    result = args[0]->val.var;
+    n = args[1]->val.num;
+
+    for (i = 0; i < __minerva_types_no; i++)
+        if ((var = minerva_var_find(result->vars, i, n)))
+            break;
+
+    if (var == NULL) {
+        minerva_repl_error("no such variable");
+        return NULL;
+    }
+
+    stringified = minerva_var_stringify(var->type, var->val);
+
+    printf("%s\n", stringified);
+
+    free(stringified);
+
+    return NULL;
+}
+
 static minerva_repl_funcs_t repl_funcs[] = {
     {"var_mut", repl_var_mut, 2}, 
     {"var_stat", repl_stat_var, 1},
@@ -330,6 +371,9 @@ static minerva_repl_funcs_t repl_funcs[] = {
     {"fuzz", repl_fuzz, 0},
     {"help", repl_help, 0},
     {"verbose", repl_verbose, 1},
+    /* stringify + alias */
+    {"stringify", repl_stringify, 2},
+    {"str", repl_stringify, 2},
     {NULL, NULL, 0}
 };
 

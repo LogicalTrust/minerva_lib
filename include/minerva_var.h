@@ -9,6 +9,7 @@
 #ifndef _MINERVA_VAR_H_
 #define _MINERVA_VAR_H_
 
+#include <sys/queue.h>
 #include <target.h>
 #include <tree.h>
 
@@ -47,5 +48,15 @@ void minerva_vars_destroy(minerva_vars_t *);
 minerva_var_t *minerva_var_get(minerva_vars_t *, minerva_type_t);
 minerva_var_t *minerva_var_find(minerva_vars_t *, minerva_type_t, unsigned int);
 void minerva_vars_evolution(minerva_vars_t *);
+
+typedef char *minerva_stringify_func_t(void *);
+
+typedef struct minerva_var_stringify_t {
+    minerva_type_t type;
+    minerva_stringify_func_t    *func;
+} minerva_var_stringify_t;
+
+extern const minerva_var_stringify_t minerva_var_stringify_funcs[];
+char *minerva_var_stringify(minerva_type_t type, void *obj);
 
 #endif /* ! _MINERVA_VAR_H_ */

@@ -147,3 +147,39 @@ minerva_var_find(minerva_vars_t *vars, minerva_type_t type, unsigned id)
 
     return RB_FIND(minerva_var_tree, &(vars->vars[type]), &elm);
 }
+
+/* STRINGIFY
+ *
+ * The idea behind the stringify is to be able to dump variable as a string
+ * and use the result to check if it's equal with other dumped strings. We
+ * need that for differential fuzzing, consider following example with simple
+ * trace:
+ *
+ * 1 = get_zero()
+ * 2 = get_one()
+ * 3 = add(1,2)
+ *
+ * We execute this trace on two different versions of bignum library, then we
+ * stringify variable 3 and compare. If we get the same result, then we're
+ * good, if not we have to investigate because it's possible bug.
+ *
+ * char *minerva_var_stringify(minerva_type_t type, void *obj) returns string
+ * representation of obj typed as type.
+ *
+ * Possible problems:
+ *  - cyclic recursion
+ *  - randomness
+ *  - pointers
+ */
+
+char *minerva_var_stringify(minerva_type_t type, void *obj) {
+    size_t i;
+
+    for (i = 0; i < MINERVA_STRINGIFY_FUNC_NUM; i++) {
+        if (minerva_var_stringify_funcs[i].type == type)
+            return minerva_var_stringify_funcs[i].func(obj);
+    }
+
+    /* if we can't stringify then return null */
+    return NULL;
+}

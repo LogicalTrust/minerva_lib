@@ -110,6 +110,13 @@ def __compile_wrapper_init(funcs):
 
     return "".join(c)
 
+def __compile_stringify(funcs):
+    r = "const minerva_var_stringify_t minerva_var_stringify_funcs[] = {\n"
+    r += ",\n".join(set(map(lambda x: "\t{"+__type_to_minerva(x[1])+", "+x[2]+"}", funcs)))
+    r += "\n};\n"
+
+    return r
+
 def compile(x):
     
     header_file = """#include <minerva_var.h>
@@ -119,6 +126,7 @@ def compile(x):
 
     headers = reversed(list(filter(lambda x: x[0] == 'include', x)))
     functions = list(filter(lambda x: x[0] == 'function', x))
+    stringify_functions = list(filter(lambda x: x[0] == 'stringify', x))
 
     for h in headers:
         header_file += ("#include %s\n" % h[1])
@@ -129,7 +137,6 @@ def compile(x):
 #define _MINERVA_TARGET_H_
 
 extern const char *minerva_type_name[];
-
 """
 
     types = set()
@@ -138,11 +145,15 @@ extern const char *minerva_type_name[];
         types.add(f[1])
         for t in f[3]:
             types.add(t[0])
+
     header_file += "#define MINERVA_FUNC_NUM %d\n" % (len(functions))
+    header_file += "#define MINERVA_STRINGIFY_FUNC_NUM %d\n" % \
+        (len(stringify_functions))
     header_file += __compile_type_enum(types)
     body_file += __compile_wrapper(functions)
     body_file += __compile_wrapper_init(functions)
     body_file += __compile_type_name(types)
+    body_file += __compile_stringify(stringify_functions)
 
     header_file += "\n#endif\n"
 

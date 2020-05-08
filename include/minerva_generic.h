@@ -10,6 +10,7 @@
 #define _MINERVA_GENERIC_H_
 
 #include <minerva_func.h>
+#include <minerva_var.h>
 
 /** checks if result is not null */
 minerva_check_t generic_not_null;
@@ -48,5 +49,9 @@ CAST_TYPE_PROTO(float,double);
 CAST_TYPE_PROTO(double,float);
 CAST_TYPE_PROTO(int,float);
 CAST_TYPE_PROTO(float,int);
+
+/** stringify */
+minerva_stringify_func_t minerva_generic_stringify_int;
+minerva_stringify_func_t minerva_generic_stringify_string;
 
 #endif /* ! _MINERVA_GENERIC_H_ */

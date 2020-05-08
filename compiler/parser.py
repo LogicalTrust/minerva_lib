@@ -1,7 +1,7 @@
 import ply.yacc as yacc
 import ply.lex as lex
 
-# XXXSHM: this is lame ~C funcion prototype parser
+# XXX: this is lame ~C funcion prototype parser
 
 ### LEXER
 
@@ -10,7 +10,8 @@ tokens = (
         'LBRACKET', 'RBRACKET',
         'STRUCT', 'PTR', 'UNION', 'RESTRICT', 'STANDARDTYPE', 'TYPE_QUALIFIER',
         'COMMA', 'SEPARATOR', 'COMMENT', 'STRING',
-        'MIINCLUDE', 'INCLUDE', 'INCLUDEFILE', 'INCLUDEFILELOCAL', 'ARROW'
+        'MIINCLUDE', 'INCLUDE', 'INCLUDEFILE', 'INCLUDEFILELOCAL', 'ARROW',
+        'STRINGIFY'
 )
 
 def t_newline(t):
@@ -29,6 +30,7 @@ t_COMMA = r','
 t_SEPARATOR = r';'
 t_PTR = r'\*'
 t_ARROW = r'\=\>'
+t_STRINGIFY = r'\-\>'
 t_COMMENT = r'--[^\n]*'
 t_STRING = r'[a-zA-Z][a-zA-Z0-9_\-\.\/]*'
 t_STANDARDTYPE = r'\b(void|char|short|int|long|float|double|signed|unsigned)\b'
@@ -61,6 +63,7 @@ def p_decl(t):
     '''decl : miinclude
             | include
             | function
+            | stringify
             | comment'''
     if t[1] != None:
         t[0] = t[1]
@@ -86,6 +89,10 @@ def p_function(t):
         t[0] = ('function', t[1],t[2],t[4],t[7])
     else:
         t[0] = ('function', t[1],t[2],[],t[6])
+
+def p_stringify(t):
+    '''stringify : type STRINGIFY STRING SEPARATOR'''
+    t[0] = ('stringify', t[1], t[3])
 
 def p_args(t):
     '''args : arg_wrapper COMMA args

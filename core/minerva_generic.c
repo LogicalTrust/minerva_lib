@@ -6,8 +6,10 @@
  * ----------------------------------------------------------------------------
  */
 
-#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <minerva_generic.h>
 
 /* generic check functions */
@@ -96,3 +98,18 @@ CAST_TYPE(float,double)
 CAST_TYPE(double,float)
 CAST_TYPE(int,float)
 CAST_TYPE(float,int)
+
+/* STRINGIFY */
+
+char *minerva_generic_stringify_int(void *obj) {
+    int x = *(int *)obj;
+    char *r;
+
+    asprintf(&r, "%d", x);
+
+    return r;
+}
+
+char *minerva_generic_stringify_string(void *obj) {
+    return strdup((char *)obj);
+}
