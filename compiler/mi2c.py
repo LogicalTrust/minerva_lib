@@ -9,8 +9,10 @@ import errno
 
 EXIT_FAILURE = 1
 
+WARNINGS = set(["unreachable"])
+
 def _print_usage():
-    print("%s -h -m[FILE] -o[OUTPUT] -I[PATH]" % (sys.argv[0]))
+    print("%s -h -m[FILE] -o[OUTPUT] -I[PATH] -W[WARN]" % (sys.argv[0]))
 
 def _print_fatal(err):
     print("")
@@ -21,7 +23,7 @@ def _print_fatal(err):
 
 def _parse_args(args, config):
     try:
-        opts,_ = getopt.getopt(args, "hm:o:I:")
+        opts,_ = getopt.getopt(args, "hm:o:I:W:")
     except (getopt.GetoptError, err):
         print(err)
         _print_usage()
@@ -34,7 +36,7 @@ def _parse_args(args, config):
 
     for opt, arg in opts:
         if opt == '-h':
-            _print_help()
+            _print_usage()
             sys.exit()
         elif opt == '-m':
             config['input_file'] = arg
@@ -42,6 +44,11 @@ def _parse_args(args, config):
             config['output'] = arg
         elif opt in '-I':
             config['include_path'].append(arg)
+        elif opt in '-W':
+            if arg in WARNINGS:
+                config['warnings'].add(arg)
+            else:
+                _print_fatal("Unknown warning flag: %s" % arg)
         else:
              assert False, "unhandled"
 
@@ -50,11 +57,37 @@ def _write_file(filename, body):
     fh.write(body)
     fh.close
 
+def _check_unreachable(functions):
+    reached_types = set()
+    reached_functions = set()
+    changed = True
+
+    while changed:
+        changed = False
+        for function in filter(lambda x: x[0] == 'function', functions):
+            if function[2] in reached_functions:
+                continue
+            if not set(map(lambda t: t[0],
+                        function[3])).issubset(reached_types):
+                continue
+            reached_types.add(function[1])
+            reached_functions.add(function[2])
+            changed = True
+
+    diff = set(map(lambda x: x[2], filter(lambda x: x[0] == 'function',
+                    functions))).difference(reached_functions)
+
+    if diff != set():
+        print('unreachable functions: %s' % ' '.join(diff))
+        sys.exit(EXIT_FAILURE)
+
+
 def main():
     config = {}
     config['input_file'] = None
     config['output'] = None
     config['include_path'] = [''] # empty prefix is default
+    config['warnings'] = set()
 
     _parse_args(sys.argv[1:], config)
 
@@ -105,6 +138,9 @@ def main():
                 input_files.append((include, local))
 
         functions += x    
+
+    if 'unreachable' in config['warnings']:
+        _check_unreachable(functions)
 
     try:
         (header, body) = compiler.compile(functions)
