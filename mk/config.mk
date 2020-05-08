@@ -28,9 +28,17 @@ CFLAGS+=-DWITH_READLINE
 LDFLAGS+=-lreadline -lcurses
 endif
 
+OS=$(shell uname -o)
+
 ifndef WITHOUT_PROGRESSBAR
 CFLAGS+=-DWITH_PROGRESSBAR
 LDFLAGS+=../../lib/progressbar/libprogressbar.a -lcurses
+ifeq ($(OS),FreeBSD)
+# clang in the FreeBSD no longer includes localbase by default so we have to
+# do it explicitly
+CFLAGS+="-I/usr/local/include/"
+LDFLAGS+="-L/usr/local/lib/"
+endif
 endif
 
 ifdef ASAN
