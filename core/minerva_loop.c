@@ -84,7 +84,7 @@ minerva_loop(unsigned int iter, minerva_vars_t **vars,
 #endif /* !WITH_PROGRESSBAR */
 
     if (crash) {
-        printf(ANSI_COLOR_GREEN "\\o/ found crash *yay* \\o/"
+        fprintf(stderr, ANSI_COLOR_GREEN "\\o/ found crash *yay* \\o/"
           ANSI_COLOR_RESET "\n");
     }
 

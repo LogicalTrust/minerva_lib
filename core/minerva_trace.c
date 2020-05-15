@@ -59,20 +59,22 @@ minerva_trace_record(minerva_trace_t *trace, minerva_var_t *new_var,
 }
 
 int
-minerva_trace_play(minerva_trace_t *trace)
+minerva_trace_play(minerva_trace_t *trace, minerva_vars_t *vars)
 {
-    minerva_vars_t *vars;
     minerva_fuzz_call_t *call;
     minerva_var_t *new_var;
     minerva_var_t **args;
 #ifdef PROGRESS_BAR
     progressbar *progress;
 #endif /* !PROGRESS_BAR */
-    int i;
-    int r = R_PLAY_NOTCRASHED;
+    int i, r = R_PLAY_NOTCRASHED;
+    char destroy_vars = 0;
 
 
-    vars = minerva_vars_new();
+    if (vars == NULL) {
+        vars = minerva_vars_new();
+        destroy_vars = 1;
+    }
 
 #ifdef PROGRESS_BAR
     progress = progressbar_new("Replay", trace->calls_num);
@@ -112,6 +114,9 @@ minerva_trace_play(minerva_trace_t *trace)
 #endif /* !PROGRESS_BAR */
     minerva_signal_revert();
 
+    if (destroy_vars != 0)
+        minerva_vars_destroy(vars);
+
     return r;
 }
 
@@ -124,7 +129,8 @@ minerva_trace_save(minerva_trace_t *trace, const char *filename)
 
     f = fopen(filename, "w");
     if (f == NULL) {
-        printf("Couldn't open output file, nothing saved.\n");
+        fprintf(stderr,
+          "Couldn't open trace output file %s, nothing saved.\n", filename);
         return;
     }
 

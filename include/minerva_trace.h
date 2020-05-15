@@ -36,7 +36,7 @@ typedef enum {
 minerva_trace_t *minerva_trace_new();
 void minerva_trace_record(minerva_trace_t *, minerva_var_t *, minerva_func_t *, 
         minerva_var_t **);
-int minerva_trace_play(minerva_trace_t*);
+int minerva_trace_play(minerva_trace_t *, minerva_vars_t *);
 void minerva_trace_save(minerva_trace_t*, const char*);
 minerva_trace_t *minerva_trace_restore(const char*, minerva_funcs_t *);
 minerva_trace_t *minerva_trace_minimize(minerva_trace_t*, minerva_funcs_t*,

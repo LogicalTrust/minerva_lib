@@ -57,6 +57,7 @@ typedef struct minerva_var_stringify_t {
 } minerva_var_stringify_t;
 
 extern const minerva_var_stringify_t minerva_var_stringify_funcs[];
-char *minerva_var_stringify(minerva_type_t type, void *obj);
+char *minerva_var_stringify(minerva_type_t, void *);
+void minerva_vars_stringify(minerva_vars_t *, const char *);
 
 #endif /* ! _MINERVA_VAR_H_ */

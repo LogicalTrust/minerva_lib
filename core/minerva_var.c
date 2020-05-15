@@ -101,6 +101,37 @@ minerva_var_destroy(minerva_vars_t *vars, minerva_var_t *var)
 }
 
 void
+minerva_vars_stringify(minerva_vars_t *vars, const char *stringify_filename)
+{
+    FILE *f;
+    char *s;
+    int i;
+    minerva_var_t *var;
+
+    f = fopen(stringify_filename, "w");
+
+    if (f == NULL) {
+        fprintf(stderr,
+          "Couldn't open trace output file %s, nothing saved.\n",
+          stringify_filename);
+        return;
+    }
+
+    for (i = 0; i < __minerva_types_no; i++) {
+        RB_FOREACH(var, minerva_var_tree, &(vars->vars[i])) {
+            minerva_assert(var->type == i);
+            s = minerva_var_stringify(var->type, var->val);
+            fprintf(f, "%u: %s\n", var->id, s);
+            xfree(s);
+        }
+    }
+
+    fclose(f);
+
+    return;
+}
+
+void
 minerva_vars_destroy(minerva_vars_t *vars)
 {
     int i;

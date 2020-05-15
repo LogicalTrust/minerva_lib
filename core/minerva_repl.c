@@ -131,7 +131,7 @@ repl_play(int argc, minerva_dict_var_t **args)
 
     result = args[0]->val.var;
 
-    switch(minerva_trace_play(result->trace)) {
+    switch(minerva_trace_play(result->trace, NULL)) {
         case R_PLAY_NOTCRASHED:
             minerva_repl_error(
               "not crashed :(");
