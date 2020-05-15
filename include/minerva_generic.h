@@ -52,6 +52,8 @@ CAST_TYPE_PROTO(float,int);
 
 /** stringify */
 minerva_stringify_func_t minerva_generic_stringify_int;
+minerva_stringify_func_t minerva_generic_stringify_double;
+minerva_stringify_func_t minerva_generic_stringify_float;
 minerva_stringify_func_t minerva_generic_stringify_string;
 
 #endif /* ! _MINERVA_GENERIC_H_ */

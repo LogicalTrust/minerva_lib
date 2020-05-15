@@ -110,6 +110,25 @@ char *minerva_generic_stringify_int(void *obj) {
     return r;
 }
 
+char *minerva_generic_stringify_float(void *obj) {
+    float x = *(float *)obj;
+    char *r;
+
+    asprintf(&r, "%.10f", x);
+
+    return r;
+}
+
+char *minerva_generic_stringify_double(void *obj) {
+    double x = *(double *)obj;
+    char *r;
+
+    asprintf(&r, "%.10lf", x);
+
+    return r;
+}
+
+
 char *minerva_generic_stringify_string(void *obj) {
     return strdup((char *)obj);
 }
