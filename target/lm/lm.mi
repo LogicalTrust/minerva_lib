@@ -2,6 +2,8 @@
 #include <math.h>
 #include <minerva_generic.h>
 
+%include <mutate.mi>
+%include <stringify_generic.mi>
 %include <cast.mi>
 
 --
