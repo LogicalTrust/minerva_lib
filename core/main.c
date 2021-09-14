@@ -24,6 +24,7 @@
 #include <minerva_repl.h>
 #include <minerva_trace.h>
 #include <target.h>
+#include <random.h>
 #include <xmalloc.h>
 
 static void
@@ -77,8 +78,7 @@ main(int argc, char **argv)
     minerva_trace_t *trace = NULL;
 
 #ifdef __linux__
-    /* XXXsn: improve randomness */
-    seed = random();
+    getentropy(&seed, sizeof(seed));
 #else
     seed = arc4random();
 #endif
@@ -127,7 +127,7 @@ main(int argc, char **argv)
     if (VERBOSE_LEVEL(VERBOSE_NOISY))
         fprintf(stderr, "seed: %u\n", seed);
 
-    srand(seed);
+    __srand(seed);
 
     if (handle_sigint == 1) {
         /* signal handlers - ^C - SIGINT */

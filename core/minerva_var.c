@@ -13,6 +13,7 @@
 #include <minerva_assert.h>
 #include <minerva_var.h>
 #include <minerva_func.h>
+#include <random.h>
 #include <xmalloc.h>
 
 static int
@@ -163,7 +164,7 @@ minerva_var_get(minerva_vars_t *vars, minerva_type_t type)
 
     /* XXXSHM: make it uniform rand again... for now it's good enough */
     var = RB_MAX(minerva_var_tree, &(vars->vars[type]));
-    elm.id = rand() % (var->id+1);
+    elm.id = __rand() % (var->id+1);
     ret = RB_NFIND(minerva_var_tree, &(vars->vars[type]), &elm);
     assert(ret != NULL);
 

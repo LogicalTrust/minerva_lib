@@ -18,7 +18,9 @@ MINERVA_CORE_SRC=\
     minerva_loop.c \
     minerva_trace.c \
     minerva_signal.c \
-    dict.c
+    dict.c \
+    random.c \
+    rand.c
 
 MINERVA_PARSER_OBJ=\
     $(COREWRKDIR)/minerva_lexer.o \

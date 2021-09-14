@@ -15,6 +15,7 @@
 #include <minerva_trace.h>
 #include <minerva_repl.h>
 #include <target.h>
+#include <random.h>
 #include <xmalloc.h>
 
 void
@@ -29,6 +30,7 @@ minerva_call(minerva_vars_t *vars, minerva_var_t *new_var,
       call_func->arg_num == 0);
 
     if (VERBOSE_LEVEL(VERBOSE_NOISY)) {
+        fprintf(stderr, "calling %s", call_func->name);
         fprintf(stderr, "(");
         for (i = 0; i < call_func->arg_num ; i++) {
             fprintf(stderr, "%d", call_vars[i]->id);
@@ -70,10 +72,6 @@ minerva_random_call(minerva_vars_t *vars, minerva_funcs_t *funcs,
     minerva_var_t *new_var = NULL;
     int result;
     int i, j, unique;
-
-    if (VERBOSE_LEVEL(VERBOSE_NOISY)) {
-        fprintf(stderr, "calling %s", call_func->name);
-    }
 
     minerva_assert(call_func != NULL);
 

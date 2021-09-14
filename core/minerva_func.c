@@ -13,6 +13,7 @@
 #include <minerva_assert.h>
 #include <minerva_var.h>
 #include <minerva_func.h>
+#include <random.h>
 #include <xmalloc.h>
 #include <target.h>
 
@@ -123,7 +124,7 @@ minerva_func_get(minerva_funcs_t *funcs, minerva_vars_t *vars, int mutate)
             func_arr[n++] = func;
         }
     }
-    ret = func_arr[rand() % n];
+    ret = func_arr[__rand() % n];
     minerva_assert(ret != NULL);
 
     return ret;
