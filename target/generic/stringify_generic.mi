@@ -1,0 +1,6 @@
+-- generic functions to stringify basic types
+
+int -> minerva_generic_stringify_int;
+float -> minerva_generic_stringify_float;
+double -> minerva_generic_stringify_double;
+char * -> minerva_generic_stringify_string;
