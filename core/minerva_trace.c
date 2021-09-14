@@ -21,6 +21,7 @@
 #include <minerva_assert.h>
 #include <minerva_signal.h>
 #include <minerva_repl.h>
+#include <random.h>
 
 #ifdef WITH_PROGRESSBAR
 #include <progressbar.h>
@@ -103,6 +104,12 @@ minerva_trace_play(minerva_trace_t *trace, minerva_vars_t *vars)
             }
 
             minerva_call(vars, new_var, call->func, args);
+	    /* XXX: if VERBOSE_NOISY is used then minerva_call left
+	     * unterminated line on the screen. Unify it in the future
+	     * in the minerva_call file */
+	    if (VERBOSE_LEVEL(VERBOSE_NOISY)) {
+		fprintf(stderr, "\n");
+	    }
 #ifdef PROGRESS_BAR
             progressbar_inc(progress);
 #endif /* !PROGRESS_BAR */
@@ -293,7 +300,7 @@ minerva_trace_minimize(minerva_trace_t *trace, minerva_funcs_t *funcs,
         if (rounds == 0) {
             break;
         }
-        if (rand() % 2) {
+        if (__rand() % 2) {
             // try and remove e->id together with dependant calls
             memset(removed, 0, sizeof(unsigned int) * trace->calls_num);
             removed[e->id] = 1;
