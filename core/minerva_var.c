@@ -113,7 +113,7 @@ minerva_vars_stringify(minerva_vars_t *vars, const char *stringify_filename)
 
     if (f == NULL) {
         fprintf(stderr,
-          "Couldn't open trace output file %s, nothing saved.\n",
+          "Couldn't open stringify output file %s, nothing saved.\n",
           stringify_filename);
         return;
     }
@@ -122,7 +122,8 @@ minerva_vars_stringify(minerva_vars_t *vars, const char *stringify_filename)
         RB_FOREACH(var, minerva_var_tree, &(vars->vars[i])) {
             minerva_assert(var->type == i);
             s = minerva_var_stringify(var->type, var->val);
-            fprintf(f, "%u: %s\n", var->id, s);
+            if (s != NULL)
+                fprintf(f, "%u: %s\n", var->id, s);
             xfree(s);
         }
     }
