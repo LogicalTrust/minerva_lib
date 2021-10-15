@@ -1,0 +1,12 @@
+Installation
+------------
+
+Create the following symlinks (or copy necessary files):
+
+ln -s /dir/to/libressl/include include_dir
+ln -s /dir/to/libressl/crypto/.libs/libcompat.a
+ln -s /dir/to/libressl/crypto/.libs/libcrypto.a
+
+
+We assume libressl-portable usage, in case you use it natively you have to do
+some shifts in the Makefile with libcompat.a (which  is not necessary).

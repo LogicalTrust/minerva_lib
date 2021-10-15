@@ -1,0 +1,7 @@
+Installation
+------------
+
+Create the following symlinks (or copy necessary files):
+
+ln -s /dir/to/openssl/include include_dir
+ln -s /dir/to/openssl/crypto/.libs/libcrypto.a

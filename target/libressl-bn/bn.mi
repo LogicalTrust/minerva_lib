@@ -1,0 +1,103 @@
+#include <openssl/bn.h>
+#include <openssl/bio.h>
+#include <minerva_generic.h>
+#include <generate.h>
+#include <stringify.h>
+
+-- stringify
+BIGNUM * -> stringify_bn;
+
+-- functions
+BIGNUM *bn_new() => generic_not_zero;
+BIGNUM *BN_new() => generic_not_zero;
+void BN_free(BIGNUM *a {DESTROY}) => generic_void;
+--void BN_init(BIGNUM *) => generic_void;
+void BN_clear(BIGNUM *a) => generic_void;
+void BN_clear_free(BIGNUM *a {DESTROY} ) => generic_void;
+BN_CTX *BN_CTX_new() => generic_not_zero;
+-- void BN_CTX_init(BN_CTX *c) => generic_void;
+void BN_CTX_free(BN_CTX *c {DESTROY}) => generic_void;
+BIGNUM *BN_copy(BIGNUM *a, BIGNUM *b) => generic_void;
+BIGNUM *BN_dup(BIGNUM *a) => generic_not_zero;
+void BN_swap(BIGNUM *a, BIGNUM *b) => generic_void;
+int BN_num_bytes(BIGNUM *a) => generic_not_zero;
+int BN_num_bits(BIGNUM *a) => generic_not_zero;
+int BN_num_bits_word(BN_ULONG w) => generic_not_zero;
+void BN_set_negative(BIGNUM *a, int n) => generic_not_zero; int BN_is_negative(BIGNUM *a) => generic_void;
+int BN_add(BIGNUM *r, BIGNUM *a, BIGNUM *b) => generic_not_zero;
+int BN_sub(BIGNUM *r, BIGNUM *a, BIGNUM *b) => generic_not_zero;
+int BN_mul(BIGNUM *r, BIGNUM *a, BIGNUM *b, BN_CTX *ctx) => generic_not_zero;
+int BN_sqr(BIGNUM *r, BIGNUM *a, BN_CTX *ctx) => generic_not_zero;
+int BN_div(BIGNUM *dv, BIGNUM *rem, BIGNUM *a, BIGNUM *d, BN_CTX *ctx) => generic_not_zero;
+int BN_mod(BIGNUM *rem, BIGNUM *a, BIGNUM *m, BN_CTX *ctx) => generic_not_zero;
+int BN_nnmod(BIGNUM *rem, BIGNUM *a, BIGNUM *m, BN_CTX *ctx) => generic_not_zero;
+int BN_mod_add(BIGNUM *ret, BIGNUM *a, BIGNUM *b, BIGNUM *m, BN_CTX *ctx) => generic_not_zero;
+int BN_mod_sub(BIGNUM *ret, BIGNUM *a, BIGNUM *b, BIGNUM *m, BN_CTX *ctx) => generic_not_zero;
+int BN_mod_mul(BIGNUM *ret, BIGNUM *a, BIGNUM *b, BIGNUM *m, BN_CTX *ctx) => generic_not_zero;
+int BN_mod_sqr(BIGNUM *ret, BIGNUM *a, BIGNUM *m, BN_CTX *ctx) => generic_not_zero;
+-- int BN_exp(BIGNUM *r, BIGNUM *a, BIGNUM *p, BN_CTX *ctx) => generic_not_zero;
+int BN_mod_exp(BIGNUM *r, BIGNUM *a, BIGNUM *p, BIGNUM *m, BN_CTX *ctx) => generic_not_zero;
+int BN_gcd(BIGNUM *r, BIGNUM *a, BIGNUM *b, BN_CTX *ctx) => generic_not_zero;
+int BN_add_word(BIGNUM *a, BN_ULONG w) => generic_not_zero;
+int BN_sub_word(BIGNUM *a, BN_ULONG w) => generic_not_zero;
+int BN_mul_word(BIGNUM *a, BN_ULONG w) => generic_not_zero;
+BN_ULONG BN_div_word(BIGNUM *a, BN_ULONG w) => generic_not_zero;
+BN_ULONG BN_mod_word(BIGNUM *a, BN_ULONG w) => generic_not_zero;
+int BN_cmp(BIGNUM *a, BIGNUM *b) => generic_not_zero;
+int BN_ucmp(BIGNUM *a, BIGNUM *b) => generic_not_zero;
+int BN_is_zero(BIGNUM *a) => generic_not_zero;
+int BN_is_one(BIGNUM *a) => generic_not_zero;
+int BN_is_word(BIGNUM *a, BN_ULONG w) => generic_not_zero;
+int BN_is_odd(BIGNUM *a) => generic_not_zero;
+int BN_zero(BIGNUM *a) => generic_not_zero;
+int BN_one(BIGNUM *a) => generic_not_zero;
+-- BIGNUM *BN_value_one() => generic_not_zero;
+int BN_set_word(BIGNUM *a, unsigned w) => generic_not_zero;
+unsigned BN_get_word(BIGNUM *a) => generic_not_zero;
+-- int BN_rand(BIGNUM *rnd, int bits, int top, int bottom) => generic_not_zero;
+-- int BN_pseudo_rand(BIGNUM *rnd, int bits, int top, int bottom) => generic_not_zero;
+-- int BN_rand_range(BIGNUM *rnd, BIGNUM *range) => generic_not_zero;
+-- int BN_pseudo_rand_range(BIGNUM *rnd, BIGNUM *range) => generic_not_zero;
+int BN_set_bit(BIGNUM *a, int n) => generic_not_zero;
+int BN_clear_bit(BIGNUM *a, int n) => generic_not_zero;
+int BN_is_bit_set(BIGNUM *a, int n) => generic_not_zero;
+int BN_mask_bits(BIGNUM *a, int n) => generic_not_zero;
+int BN_lshift(BIGNUM *r, BIGNUM *a, int n) => generic_not_zero;
+int BN_lshift1(BIGNUM *r, BIGNUM *a) => generic_not_zero;
+int BN_rshift(BIGNUM *r, BIGNUM *a, int n) => generic_not_zero;
+int BN_rshift1(BIGNUM *r, BIGNUM *a) => generic_not_zero;
+-- int BN_bn2bin(BIGNUM *a, char *to) => generic_not_zero;
+-- BIGNUM *BN_bin2bn(char *s, int len, BIGNUM *ret) => generic_not_zero;
+char *BN_bn2hex(BIGNUM *a) => generic_not_zero;
+char *BN_bn2dec(BIGNUM *a) => generic_not_zero;
+int BN_print(BIO *fp, BIGNUM *a) => generic_not_zero;
+int BN_print_fp(FILE *fp, BIGNUM *a) => generic_not_zero;
+-- int BN_bn2mpi(BIGNUM *a, char *to) => generic_not_zero;
+-- BIGNUM *BN_mpi2bn(char *s, int len, BIGNUM *ret) => generic_not_zero;
+-- BIGNUM *BN_mod_inverse(BIGNUM *r, BIGNUM *a, BIGNUM *n, BN_CTX *ctx) => generic_not_zero;
+BN_RECP_CTX *BN_RECP_CTX_new() => generic_not_zero;
+void BN_RECP_CTX_init(BN_RECP_CTX *recp) => generic_void;
+void BN_RECP_CTX_free(BN_RECP_CTX *recp {DESTROY}) => generic_void;
+int BN_RECP_CTX_set(BN_RECP_CTX *recp, BIGNUM *m, BN_CTX *ctx) => generic_not_zero;
+int BN_mod_mul_reciprocal(BIGNUM *r, BIGNUM *a, BIGNUM *b,
+BN_RECP_CTX *recp, BN_CTX *ctx) => generic_not_zero;
+BN_MONT_CTX *BN_MONT_CTX_new() => generic_not_zero;
+void BN_MONT_CTX_init(BN_MONT_CTX *ctx) => generic_void;
+void BN_MONT_CTX_free(BN_MONT_CTX *mont {DESTROY}) => generic_void;
+int BN_MONT_CTX_set(BN_MONT_CTX *mont, BIGNUM *m, BN_CTX *ctx) => generic_not_zero;
+BN_MONT_CTX *BN_MONT_CTX_copy(BN_MONT_CTX *to, BN_MONT_CTX *from) => generic_void;
+int BN_mod_mul_montgomery(BIGNUM *r, BIGNUM *a, BIGNUM *b, BN_MONT_CTX *mont, BN_CTX *ctx) => generic_not_zero;
+int BN_from_montgomery(BIGNUM *r, BIGNUM *a, BN_MONT_CTX *mont, BN_CTX *ctx) => generic_not_zero;
+int BN_to_montgomery(BIGNUM *r, BIGNUM *a, BN_MONT_CTX *mont, BN_CTX *ctx) => generic_not_zero;
+BN_BLINDING *BN_BLINDING_new(BIGNUM *A, BIGNUM *Ai, BIGNUM *mod) => generic_not_zero;
+void BN_BLINDING_free(BN_BLINDING *b {DESTROY}) => generic_void;
+int BN_BLINDING_update(BN_BLINDING *b,BN_CTX *ctx) => generic_not_zero;
+int BN_BLINDING_convert(BIGNUM *n, BN_BLINDING *b, BN_CTX *ctx) => generic_not_zero;
+int BN_BLINDING_invert(BIGNUM *n, BN_BLINDING *b, BN_CTX *ctx) => generic_not_zero;
+int BN_BLINDING_convert_ex(BIGNUM *n, BIGNUM *r, BN_BLINDING *b, BN_CTX *ctx) => generic_not_zero;
+int BN_BLINDING_invert_ex(BIGNUM *n,BIGNUM *r,BN_BLINDING *b, BN_CTX *ctx) => generic_not_zero;
+-- long BN_BLINDING_get_thread_id(BN_BLINDING *) => generic_not_zero;
+-- void BN_BLINDING_set_thread_id(BN_BLINDING *, unsigned) => generic_void;
+long BN_BLINDING_get_flags(BN_BLINDING *) => generic_not_zero;
+void BN_BLINDING_set_flags(BN_BLINDING *, unsigned) => generic_void;
+-- BIGNUM *BN_generate_prime(BIGNUM *ret, int bits, int safe, const BIGNUM *add, const BIGNUM *rem, void (*callback)(int,int,void *), void *cb_arg) => generic_not_zero;
