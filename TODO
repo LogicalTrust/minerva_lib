@@ -1,8 +1,6 @@
 TODO:
 
- * type conversion/casting
  * test case min
- * differential fuzzing
  * smart fuzzing (coverage)
  * get rid of compiler in Python
  * write (better/any) documentation
