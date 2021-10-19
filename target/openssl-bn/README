@@ -1,7 +1,17 @@
 Installation
 ------------
 
+Get sources:
+
+ $ git clone --depth=1 --branch=OpenSSL_1_1_1-stable https://github.com/openssl/openssl/
+
+Build OpenSSL (in the example OpenSSL is build with debug options and
+address sanitizer):
+
+ $ ./config --debug -fsanitize=address
+ $ make -j4
+
 Create the following symlinks (or copy necessary files):
 
-ln -s /dir/to/openssl/include include_dir
-ln -s /dir/to/openssl/libcrypto.a
+ $ ln -s /dir/to/openssl/include include_dir
+ $ ln -s /dir/to/openssl/libcrypto.a

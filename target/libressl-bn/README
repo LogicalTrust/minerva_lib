@@ -1,12 +1,26 @@
 Installation
 ------------
 
-Create the following symlinks (or copy necessary files):
+Build libressl:
 
-ln -s /dir/to/libressl/include include_dir
-ln -s /dir/to/libressl/crypto/.libs/libcompat.a
-ln -s /dir/to/libressl/crypto/.libs/libcrypto.a
+ Prepare sources:
 
+ $ git clone https://github.com/libressl-portable/portable
+ $ cd portable
+ $ ./autogen.sh
+
+ Compile (the example builds it with Address Sanitizer):
+
+ $ CFLAGS="-fsanitize=address" LDFLAGS="-fsanitize=address" ./configure
+ $ make -j4
+
+
+Create the following symlinks (or copy necessary files), this command should
+be performed in the target library:
+
+$ ln -s /dir/to/libressl/include include_dir
+$ ln -s /dir/to/libressl/crypto/.libs/libcompat.a
+$ ln -s /dir/to/libressl/crypto/.libs/libcrypto.a
 
 We assume libressl-portable usage, in case you use it natively you have to do
 some shifts in the Makefile with libcompat.a (which  is not necessary).
