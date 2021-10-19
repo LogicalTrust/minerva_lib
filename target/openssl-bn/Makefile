@@ -4,6 +4,6 @@ LOCAL_SRC= \
 	stringify.c
 
 CFLAGS=-I include_dir/
-LDFLAGS=-z muldefs -L . -lcrypto
+LDFLAGS=-z muldefs -L . -lcrypto -ldl -pthread
 
 include ../../mk/minerva.mk
