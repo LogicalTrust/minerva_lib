@@ -130,5 +130,8 @@ char *minerva_generic_stringify_double(void *obj) {
 
 
 char *minerva_generic_stringify_string(void *obj) {
+    if (obj == NULL)
+        return NULL;
+
     return strdup((char *)obj);
 }
