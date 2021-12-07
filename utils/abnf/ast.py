@@ -103,7 +103,7 @@ def traverse_rule(ast, callback, global_state = None):
         return callback(ast, r, global_state)
     elif isinstance(ast, Option):
         r = traverse_rule(ast.option, callback, global_state)
-        return callback(ast, state, global_state)
+        return callback(ast, r, global_state)
     elif isinstance(ast, Alternation):
         rs = list(map(lambda x: traverse_rule(x, callback, global_state), ast.alternation))
         return callback(ast, rs, global_state)

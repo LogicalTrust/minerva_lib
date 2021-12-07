@@ -3,18 +3,6 @@ from ast import Option, Group, Concatenation, Alternation, Rule, Element, Rulena
 def rule_to_type(name, ptr = False):
     return "{name}_t{ptr}".format(name = name, ptr = " *" if ptr else "")
 
-def variables_needed(ast, state, global_state):
-    """get information about variables needed"""
-    if type(ast) in  [NumVal, ProseVal, CharVal]:
-        return []
-    elif isinstance(ast, Rulename):
-        return [ast.name]
-
-    if type(ast) in [Alternation, Concatenation]:
-        return sum(state, [])
-
-    return state
-
 def variable_to_decl(var, prefix = 'v'):
     var_num, var_type = var
 
@@ -24,8 +12,6 @@ def add_tab(s):
     s = s.split('\n')
     s = map(lambda x: '\t' + x, s)
     return '\n'.join(s)
-
-MAGIC_VAL = "$MINERVA_MAGIC_VAL$"
 
 def compile_ast(ast, state, global_state):
     
@@ -45,7 +31,7 @@ def compile_ast(ast, state, global_state):
     elif isinstance(ast, ProseVal):
         return "minerva_concat(&r, \"{text}\");\n".format(text = ast.string)
     elif isinstance(ast, Rulename):
-        return "minerva_concat(&r, " + MAGIC_VAL + ");\n"
+        return "minerva_concat(&r, {fname}());".format(fname = ast.name)
     elif isinstance(ast, Element):
         if ast.repeat is None:
             return state
@@ -62,7 +48,7 @@ def compile_ast(ast, state, global_state):
             if ast.repeat[2] is None:
                 upper = "10" # XXX: arbitrary?
             else:
-                upprt = ast.repeat[2]
+                upper = ast.repeat[2]
 
             r.append(" num += (__rand() %% %s);" % upper) 
         r.append("while(num--)")
@@ -90,28 +76,16 @@ def compile_ast(ast, state, global_state):
         return state or ""
 
 def compile_rule(rule):
-    variables = list(enumerate(traverse_rule(rule.rule, variables_needed)))
-
     # header
     r = []
     r.append("")
     r.append("{return_type}".format(return_type = rule_to_type(rule.rulename, ptr = True)))
-    r.append("{name}({variables})".format(name = rule.rulename, variables = ', '.join(map(variable_to_decl, variables))))
+    r.append("{name}()".format(name = rule.rulename))
     r.append("{");
     r.append("char *r = \"\";")
-    code = traverse_rule(rule.rule, compile_ast).split(MAGIC_VAL)
-    r.append(''.join(map(lambda args: args[0] + "v"+str(args[1][0]), zip(code, variables)))+code[-1])
+    r.append(traverse_rule(rule.rule, compile_ast))
     r.append("return r;")
     r.append("}");
-
-    r.append("")
-    r.append("{return_type}".format(return_type = rule_to_type(rule.rulename, ptr = True)))
-    r.append("{name}_empty()".format(name = rule.rulename))
-    r.append("{");
-    r.append("\tstatic int r = 0;")
-    r.append("\tif (!r) { r = 1; return NULL; }")
-    r.append("\treturn 1;")
-    r.append("}")
 
     return '\n'.join(r)
 
@@ -129,11 +103,7 @@ def compile_include(rules):
 
     # GENERATE INCLUDE    
     for rule in rules:
-        args = traverse_rule(rule.rule, variables_needed)
-        args_str = ', '.join(map(lambda arg: rule_to_type(arg, ptr = True), args))
-        r.append("{return_type}{name}({args});".format(return_type = rule_to_type(rule.rulename, ptr = True), name = rule.rulename, args = args_str))
-        r.append("{return_type}{name}_empty(void);".format(return_type =
-                    rule_to_type(rule.rulename, ptr = True), name = rule.rulename))
+        r.append("{return_type}{name}();".format(return_type = rule_to_type(rule.rulename, ptr = True), name = rule.rulename))
 
     return '\n'.join(r) + "\n"
 
@@ -146,13 +116,7 @@ def compile_miconfig(rules, name):
 
     # GENERATE MINERVA RULES
     for rule in rules:
-        args = traverse_rule(rule.rule, variables_needed)
-        args_str = ', '.join(map(lambda arg: rule_to_type(arg, ptr = True), args))
-        r.append("{return_type}{name}({args}) => generic_not_null;".format(return_type = rule_to_type(rule.rulename, ptr = True), name = rule.rulename, args = args_str))
-        r.append("{return_type}{name}_empty() => generic_zero;".format(return_type =
-                rule_to_type(rule.rulename, ptr = True), name = rule.rulename))
-
-
+        r.append("{return_type}{name}() => generic_not_null;".format(return_type = rule_to_type(rule.rulename, ptr = True), name = rule.rulename))
         r.append("{return_type} -> minerva_generic_stringify_string;".format(return_type =
                 rule_to_type(rule.rulename, ptr = True)))
 
