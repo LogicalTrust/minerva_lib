@@ -28,7 +28,7 @@ CFLAGS+=-DWITH_READLINE
 LDFLAGS+=-lreadline -lcurses
 endif
 
-OS=$(shell uname -o)
+OS=$(shell uname -s)
 
 ifndef WITHOUT_PROGRESSBAR
 CFLAGS+=-DWITH_PROGRESSBAR
