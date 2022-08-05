@@ -35,6 +35,19 @@ bn_gen_rand(void)
     return BN_bin2bn(x, len, NULL);
 }
 
+BN_ULONG
+bn_ulong_new(void)
+{
+    BN_ULONG r;
+    uint8_t *x = (uint8_t *)&r;
+    int i;
+
+    for (i = 0; i < sizeof(r); i++)
+        *(x++) = rand();
+
+    return r;
+}
+
 void __sanitizer_cov_trace_pc(void) {
 //    printf("HERE: %p\n", __builtin_return_address(0));
 }

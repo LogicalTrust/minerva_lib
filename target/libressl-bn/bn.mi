@@ -10,6 +10,7 @@ BIGNUM * -> stringify_bn;
 -- generators
 BIGNUM *bn_new() => generic_not_zero;
 BIGNUM *bn_gen_rand() => generic_not_zero;
+BN_ULONG bn_ulong_new() => generic_success;
 
 -- functions
 BIGNUM *BN_new() => generic_not_zero;
@@ -65,9 +66,9 @@ int BN_set_bit(BIGNUM *a, int n) => generic_not_zero;
 int BN_clear_bit(BIGNUM *a, int n) => generic_not_zero;
 int BN_is_bit_set(BIGNUM *a, int n) => generic_not_zero;
 int BN_mask_bits(BIGNUM *a, int n) => generic_not_zero;
--- int BN_lshift(BIGNUM *r, BIGNUM *a, int n) => generic_not_zero;
+int BN_lshift(BIGNUM *r, BIGNUM *a, int n) => generic_not_zero;
 int BN_lshift1(BIGNUM *r, BIGNUM *a) => generic_not_zero;
--- int BN_rshift(BIGNUM *r, BIGNUM *a, int n) => generic_not_zero;
+int BN_rshift(BIGNUM *r, BIGNUM *a, int n) => generic_not_zero;
 int BN_rshift1(BIGNUM *r, BIGNUM *a) => generic_not_zero;
 -- int BN_bn2bin(BIGNUM *a, char *to) => generic_not_zero;
 -- BIGNUM *BN_bin2bn(char *s, int len, BIGNUM *ret) => generic_not_zero;
