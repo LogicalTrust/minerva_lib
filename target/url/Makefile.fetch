@@ -1,0 +1,8 @@
+TARGET=fetch
+LOCAL_SRC= \
+    url.c \
+    exec-fetch.c
+
+LDFLAGS=-lfetch
+
+include ../../mk/minerva.mk

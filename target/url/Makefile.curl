@@ -1,0 +1,9 @@
+TARGET=curl
+LOCAL_SRC= \
+    url.c \
+    exec-curl.c
+
+CFLAGS=-I /usr/local/include
+LDFLAGS=-L /usr/local/lib -lcurl
+
+include ../../mk/minerva.mk

@@ -1,0 +1,10 @@
+#include <minerva_generic.h>
+#include "exec.h"
+
+-- stringify
+char * -> minerva_generic_stringify_string;
+URI_t * -> minerva_generic_stringify_string;
+
+-- methods
+URI_t *URI() => generic_not_null;
+char *get_host(URI_t *) => generic_not_null;
