@@ -27,7 +27,7 @@ def create_num_token(prefix, definition):
 t_BIN_VAL = create_num_token('b', d_BIN)
 t_DEC_VAL = create_num_token('d', d_DEC)
 t_HEX_VAL = create_num_token('x', d_HEX)
-t_STRING = r'[A-Za-z_-]+'
+t_STRING = r'[A-Za-z_-][A-Za-z0-9_-]+'
 t_NOT_EQUAL = r'=/'
 t_COMMENT = r';[^\n]*'
 t_ignore = "\n\t " # ignore spaces and tabs
@@ -59,7 +59,7 @@ def p_rule(t):
 
 def p_rulename(t): 
     '''rulename : STRING'''
-    t[0] = Rulename(t[1])
+    t[0] = Rulename(t[1].replace('-','_'))
 
 def p_defined_as(t):
     '''defined_as : operator '''
@@ -143,7 +143,7 @@ def p_element(t):
 
 def p_char_val(t):
     '''char_val : CHAR_VAL'''
-    t[0] = CharVal(t[1])
+    t[0] = CharVal(t[1].replace("\\", "\\\\"))
 
 def p_prose_val(t):
     '''prose_val : PROSE_VAL'''
