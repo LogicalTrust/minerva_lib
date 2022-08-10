@@ -14,5 +14,5 @@ get_host(URI_t *x) {
 
 cleanup:
     curl_url_cleanup(h);
-	return r;
+    return r;
 }

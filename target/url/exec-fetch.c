@@ -18,5 +18,5 @@ get_host(URI_t *x) {
 
 cleanup:
     free(u);
-	return r;
+    return r;
 }
