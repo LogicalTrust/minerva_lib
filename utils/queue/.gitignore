@@ -1,0 +1,8 @@
+# Python files
+*.py[cod]
+__pycache__/
+lib/__pycache__/
+
+# Artifacts
+results
+compare_output
