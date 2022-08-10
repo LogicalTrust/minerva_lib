@@ -1,0 +1,6 @@
+#include <minerva_generic.h>
+#include "minerva_concat.h"
+#include "http.h"
+
+HTTP_message_t *HTTP_message() => generic_not_null;
+HTTP_message_t * -> minerva_generic_stringify_string;
