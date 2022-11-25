@@ -1,4 +1,4 @@
-from ast import Option, Group, Concatenation, Alternation, Rule, Element, Rulename, NumVal, CharVal, ProseVal, traverse_rule
+from abnf_ast import Option, Group, Concatenation, Alternation, Rule, Element, Rulename, NumVal, CharVal, ProseVal, traverse_rule
 
 def rule_to_type(name, ptr = False):
     return "{name}_t{ptr}".format(name = name, ptr = " *" if ptr else "")

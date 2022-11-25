@@ -1,4 +1,4 @@
-from ast import Option, Group, Concatenation, Alternation, Rule, Element, Rulename, NumVal, CharVal, ProseVal
+from abnf_ast import Option, Group, Concatenation, Alternation, Rule, Element, Rulename, NumVal, CharVal, ProseVal
 import ply.yacc as yacc
 import ply.lex as lex
 
