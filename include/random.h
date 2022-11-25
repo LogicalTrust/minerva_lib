@@ -27,6 +27,7 @@
 
 #pragma once
 #include <stdint.h>
+#include <stddef.h>
 
 /*
  * For each of the currently supported random number generators, we have a
