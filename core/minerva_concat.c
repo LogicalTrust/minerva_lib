@@ -16,8 +16,6 @@
 void
 minerva_concat(char **r, char *s)
 {
-    char *prev = *r;
-
     /* skip in case of null */
     if (s == NULL || *r == NULL) {
         *r = NULL;
