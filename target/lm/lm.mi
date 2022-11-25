@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <minerva_generic.h>
+#include "gen.h"
 
 %include <mutate.mi>
 %include <stringify_generic.mi>
@@ -10,7 +11,10 @@
 -- MATH
 --
 
-double drand48() => generic_success;
+-- double drand48() => generic_success;
+
+double  getone() => generic_success;
+double  getzero() => generic_success;
 
 int	isinf(double) => generic_success;
 int	isnan(double) => generic_success;
