@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE"
- * If we meet some day, and you think this stuff is worth it, you can buy us 
+ * If we meet some day, and you think this stuff is worth it, you can buy us
  * a beer in return.
  * ----------------------------------------------------------------------------
  */
@@ -60,10 +60,37 @@ minerva_call(minerva_vars_t *vars, minerva_var_t *new_var,
         }
     }
 
+
+    /*
+     * check if called function returned success, if no check function is
+     * provided, then functions cannot fail. In this case check function is
+     * indicated by NULL
+     */
+
+    if (call_func->check == NULL || (call_func->check)(new_var->val) == 1) {
+        call_func->success++;
+        if (VERBOSE_LEVEL(VERBOSE_NOISY)) {
+            fprintf(stderr, "success");
+        }
+    } else {
+        call_func->failure++;
+        if (VERBOSE_LEVEL(VERBOSE_NOISY)) {
+            fprintf(stderr, "failed");
+        }
+        minerva_var_destroy(vars, new_var);
+    }
+
+
+    if (VERBOSE_LEVEL(VERBOSE_NOISY)) {
+        fprintf(stderr, "\n");
+    }
+
+
+
     return;
 }
 
-int
+void
 minerva_random_call(minerva_vars_t *vars, minerva_funcs_t *funcs,
   minerva_trace_t *trace, int mutate)
 {
@@ -98,7 +125,7 @@ minerva_random_call(minerva_vars_t *vars, minerva_funcs_t *funcs,
                 if (unique != 0)
                     break;
             }
-        } 
+        }
     }
 
     for (i = 0; i < call_func->arg_num; i++) {
@@ -115,42 +142,17 @@ minerva_random_call(minerva_vars_t *vars, minerva_funcs_t *funcs,
                 if (unique != 0)
                     break;
             }
-        } 
+        }
     }
-    
-    for (i = 0; i < call_func->arg_num; i++) 
+
+    for (i = 0; i < call_func->arg_num; i++)
         minerva_assert(call_vars[i] != NULL);
 
     new_var = minerva_var_new(vars, call_func->return_type, 0);
     minerva_trace_record(trace, new_var, call_func, call_vars);
     minerva_call(vars, new_var, call_func, call_vars);
 
-    /* 
-     * check if called function returned success, if no check function is
-     * provided, then functions cannot fail. In this case check function is
-     * indicated by NULL
-     */
-
-    if (call_func->check == NULL || (call_func->check)(new_var->val) == 1) {
-        call_func->success++;
-        if (VERBOSE_LEVEL(VERBOSE_NOISY)) {
-            fprintf(stderr, "success");
-        }
-        result = 1;
-    } else {
-        call_func->failure++;
-        if (VERBOSE_LEVEL(VERBOSE_NOISY)) {
-            fprintf(stderr, "failed");
-        }
-        result = 0;
-        minerva_var_destroy(vars, new_var);
-    } 
-
-    if (VERBOSE_LEVEL(VERBOSE_NOISY)) {
-        fprintf(stderr, "\n");
-    }
-
     xfree(call_vars);
 
-    return result;
+    return;
 }

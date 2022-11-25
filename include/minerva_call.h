@@ -16,7 +16,7 @@
 void sigsegv_minerva_call(int sig);
 void minerva_call(minerva_vars_t *, minerva_var_t *, minerva_func_t *,
   minerva_var_t **);
-int minerva_random_call(minerva_vars_t *, minerva_funcs_t *,
+void minerva_random_call(minerva_vars_t *, minerva_funcs_t *,
   minerva_trace_t *, int);
 
 #endif /* ! _MINERVA_CALL_H_ */
