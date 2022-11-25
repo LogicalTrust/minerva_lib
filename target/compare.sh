@@ -15,8 +15,8 @@ fi
 while true; do 
     while true; do
         SEED=$(od -A n -t u -N 4 /dev/urandom | tr -d ' ')
-        LEFT_RESULT=$(${LEFT} -i ${ITER} -s ${SEED} -D /dev/stdout | sort -n | ${MD5})
-        RIGHT_RESULT=$(${RIGHT} -i ${ITER} -s ${SEED} -D /dev/stdout | sort -n | ${MD5})
+        LEFT_RESULT=$(${LEFT} -i ${ITER} -s ${SEED} -D /dev/stdout | ${MD5} | cut -d ' ' -f 1)
+        RIGHT_RESULT=$(${RIGHT} -i ${ITER} -s ${SEED} -D /dev/stdout | ${MD5} | cut -d ' ' -f 1)
 
         if [ "${LEFT_RESULT}" != "${RIGHT_RESULT}" ] ; then
             break
