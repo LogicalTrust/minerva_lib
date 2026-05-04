@@ -87,7 +87,7 @@ CALL    :   IDENTIFIER LPAREN RPAREN {
 ARGS    :   ARGS COMMA ARG {
                 $$ = $1;
                 $$->num_arg++;
-                $$->args = realloc($$->args, sizeof(minerva_repl_arg_t *) * $1->num_arg);
+                $$->args = minerva_xrealloc($$->args,  $1->num_arg, sizeof(minerva_repl_arg_t *));
                 $$->args[$1->num_arg - 1] = $3;
             }
         |   ARG {
@@ -108,7 +108,9 @@ ARG     :   IDENTIFIER {
                 $$->type = STRING_VAL;
                 /* trim quotes */
                 $$->val.str = xstrdup(&($1[1]));
-                $$->val.str[strlen($$->val.str)-1] = '\0';
+                if (strlen($$->val.str) > 0) {
+                    $$->val.str[strlen($$->val.str)-1] = '\0';
+                }
             }
         |   NUMBER { 
                 $$ = xcalloc(1, sizeof(minerva_repl_arg_t));
@@ -130,9 +132,9 @@ minerva_repl_parse(const char *str)
     p_error = 0;
     buffer = yy_scan_string(str);
     yyparse();
-    if (p_error != 0)
-	return NULL;
     yy_delete_buffer(buffer);
+    if (p_error != 0)
+	    return NULL;
 
     return call;
 }

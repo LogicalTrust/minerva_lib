@@ -69,13 +69,13 @@ xmalloc(size_t size)
 
 /* XXX: nuke that shit? */
 void *
-_xrealloc(void * ptr, size_t nmemb, size_t size)
+minerva_xrealloc(void *ptr, size_t nmemb, size_t size)
 {
     void *ret;
     size_t memory;
     
     /* we don't want to allocate 0 memory */
-    if (nmemb == 0 || size == 0) {
+    if (size == 0) {
         fprintf(stderr, "Failure on allocating 0 memory.\n");
         exit(EXIT_FAILURE);
     }
