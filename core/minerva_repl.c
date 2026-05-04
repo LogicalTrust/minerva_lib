@@ -480,6 +480,7 @@ minerva_repl_eval_line(dict_t *vars, minerva_line_t *line)
                 minerva_repl_error("args no mismatch");
             else
                 result = repl_funcs[i].faddr(line->call->num_arg, argv);
+            break;
         }
     }
 
