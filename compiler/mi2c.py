@@ -55,7 +55,7 @@ def _parse_args(args, config):
 def _write_file(filename, body):
     fh = open(filename, 'w')
     fh.write(body)
-    fh.close
+    fh.close()
 
 def _check_unreachable(functions):
     reached_types = set()
