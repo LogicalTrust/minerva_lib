@@ -97,6 +97,7 @@ main(int argc, char **argv)
             break;
         case 'M':
             mutate = 1;
+            break;
         case 'C':
             handle_sigint = 0;
             break;
