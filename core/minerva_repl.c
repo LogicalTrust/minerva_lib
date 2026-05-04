@@ -503,8 +503,10 @@ error:
         if (argv[i] == NULL)
             break;
         switch (argv[i]->type) {
-            case MINERVA_NUMBER_T:
             case MINERVA_STRING_T:
+                free(argv[i]->val.str);
+                /*FALLTHROUGH*/
+            case MINERVA_NUMBER_T:
                 free(argv[i]);
                 break;
             default:
