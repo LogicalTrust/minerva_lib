@@ -97,7 +97,6 @@ minerva_random_call(minerva_vars_t *vars, minerva_funcs_t *funcs,
     minerva_func_t *call_func = minerva_func_get(funcs, vars, mutate);
     minerva_var_t **call_vars = NULL;
     minerva_var_t *new_var = NULL;
-    int result;
     int i, j, unique;
 
     minerva_assert(call_func != NULL);
